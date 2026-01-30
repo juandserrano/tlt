@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://s54p8v784o7s"]
+
+[ext_resource type="PackedScene" uid="uid://d1tgxc3ypqynh" path="res://scenes/HexGrid.tscn" id="1_lnu2h"]
+[ext_resource type="Script" uid="uid://di3wir2ct75ay" path="res://scripts/camera.gd" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://13mgsiy6icow" path="res://resources/models/enemies/pawn.glb" id="3_lnu2h"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lnu2h"]
+
+[sub_resource type="Sky" id="Sky_lbhrr"]
+sky_material = SubResource("ProceduralSkyMaterial_lnu2h")
+
+[sub_resource type="Environment" id="Environment_iywne"]
+background_mode = 2
+sky = SubResource("Sky_lbhrr")
+
+[node name="Game" type="Node3D" unique_id=2003645501]
+
+[node name="HexGrid" parent="." unique_id=1275277607 instance=ExtResource("1_lnu2h")]
+grid_radius = 10
+tile_size = 0.58
+noise_threshold = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1390325344]
+transform = Transform3D(1, 0, 0, 0, 0.6468431, 0.7626232, 0, -0.7626232, 0.6468431, -0.16439533, 5.3601527, 4.1066847)
+script = ExtResource("2_yqjtg")
+
+[node name="Environment" type="Node3D" parent="." unique_id=1473826979]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=592999540]
+environment = SubResource("Environment_iywne")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1179564163]
+transform = Transform3D(0.6092736, -0.51093364, 0.60640955, -3.5527137e-15, 0.76474154, 0.6443371, -0.79296, -0.39257762, 0.46593684, 0, 6.8801084, 4.7083044)
+shadow_enabled = true
+
+[node name="pawn" parent="." unique_id=24206659 instance=ExtResource("3_lnu2h")]

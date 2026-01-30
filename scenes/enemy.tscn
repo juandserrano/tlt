@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch14u6uuib5ax"]
+
+[ext_resource type="Script" uid="uid://8e8rp5rw5yc7" path="res://scripts/enemy.gd" id="1_md0e3"]
+[ext_resource type="PackedScene" uid="uid://13mgsiy6icow" path="res://resources/models/enemies/pawn.glb" id="2_4ra3w"]
+
+[node name="Enemy" type="Node3D"]
+script = ExtResource("1_md0e3")
+model = ExtResource("2_4ra3w")

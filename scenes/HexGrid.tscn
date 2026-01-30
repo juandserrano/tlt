@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://d1tgxc3ypqynh"]
+
+[ext_resource type="ArrayMesh" uid="uid://gojuq5k2p20i" path="res://resources/models/tiles/dirt_tile.tres" id="1_pu875"]
+[ext_resource type="Script" uid="uid://cgqnocbi6jvfq" path="res://scripts/hex_grid.gd" id="2_ug5ck"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_wdud7"]
+transform_format = 1
+use_colors = true
+mesh = ExtResource("1_pu875")
+
+[node name="HexGrid" type="MultiMeshInstance3D" unique_id=1275277607]
+multimesh = SubResource("MultiMesh_wdud7")
+script = ExtResource("2_ug5ck")
+noise_threshold = 0.5
