@@ -1,8 +1,21 @@
+@tool
 extends MultiMeshInstance3D
 
-@export var grid_radius: int = 20
-@export var tile_size: float = 1.0
-@export var noise_threshold: float = 0.2 # Adjust this to change green/brown balance
+@export var grid_radius: int = 20:
+	set(value):
+		grid_radius = value
+		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
+			setup_grid()
+@export var tile_size: float = 1.0:
+	set(value):
+		tile_size = value
+		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
+			setup_grid()
+@export var noise_threshold: float = 0.2:
+	set(value):
+		noise_threshold = value
+		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
+			setup_grid() # Adjust this to change green/brown balance
 
 var noise = FastNoiseLite.new()
 
@@ -15,7 +28,7 @@ func _ready():
 
 func setup_grid():
 	var hex_count = 3 * grid_radius * (grid_radius + 1) + 1
-	multimesh.use_colors = true # Essential for per-instance coloring
+	#multimesh.use_colors = true # Essential for per-instance coloring
 	multimesh.instance_count = hex_count
 	
 	var index = 0
