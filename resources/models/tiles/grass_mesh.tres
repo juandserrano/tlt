@@ -1,0 +1,20 @@
+[gd_resource type="CylinderMesh" format=3 uid="uid://bvc2xoxeaufor"]
+
+[ext_resource type="Shader" uid="uid://cs8utkdgsnohq" path="res://resources/models/tiles/grass_mesh.gdshader" id="1_yat8r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a7vyp"]
+render_priority = 0
+shader = ExtResource("1_yat8r")
+shader_parameter/top_color = Color(0.1, 0.5, 0.1, 1)
+shader_parameter/bottom_color = Color(0.05, 0.2, 0.05, 1)
+shader_parameter/wind_speed = 1.0
+shader_parameter/wind_strength = 0.2
+
+[resource]
+lightmap_size_hint = Vector2i(4, 5)
+material = SubResource("ShaderMaterial_a7vyp")
+top_radius = 0.0
+bottom_radius = 0.07
+height = 0.065
+radial_segments = 4
+rings = 0

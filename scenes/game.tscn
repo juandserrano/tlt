@@ -1,8 +1,27 @@
 [gd_scene format=3 uid="uid://s54p8v784o7s"]
 
 [ext_resource type="PackedScene" uid="uid://d1tgxc3ypqynh" path="res://scenes/HexGrid.tscn" id="1_lnu2h"]
+[ext_resource type="Shader" uid="uid://cs8utkdgsnohq" path="res://resources/models/tiles/grass_mesh.gdshader" id="2_iywne"]
 [ext_resource type="Script" uid="uid://di3wir2ct75ay" path="res://scripts/camera.gd" id="2_yqjtg"]
+[ext_resource type="Script" uid="uid://brplrnxve1ick" path="res://scripts/grass_multimesh.gd" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://13mgsiy6icow" path="res://resources/models/enemies/pawn.glb" id="3_lnu2h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
+render_priority = 0
+shader = ExtResource("2_iywne")
+shader_parameter/top_color = Color(0, 0.681845, 0, 1)
+shader_parameter/bottom_color = Color(0.20384946, 0.59637594, 0.2055093, 1)
+shader_parameter/wind_speed = 0.2
+shader_parameter/wind_strength = 0.125
+
+[sub_resource type="QuadMesh" id="QuadMesh_u5sy4"]
+material = SubResource("ShaderMaterial_iywne")
+size = Vector2(0.005, 0.09)
+
+[sub_resource type="MultiMesh" id="MultiMesh_gee14"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("QuadMesh_u5sy4")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lnu2h"]
 
@@ -16,9 +35,19 @@ sky = SubResource("Sky_lbhrr")
 [node name="Game" type="Node3D" unique_id=2003645501]
 
 [node name="HexGrid" parent="." unique_id=1275277607 instance=ExtResource("1_lnu2h")]
-grid_radius = 10
+grid_radius = 7
 tile_size = 0.58
 noise_threshold = 0.1
+grass_color = Color(0.022281587, 0.15265098, 3.6098065e-08, 1)
+dirt_color = Color(0.10482413, 0.03586611, 0, 1)
+
+[node name="GrassPatch" type="MultiMeshInstance3D" parent="." unique_id=33840693 node_paths=PackedStringArray("hex_grid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
+cast_shadow = 0
+multimesh = SubResource("MultiMesh_gee14")
+script = ExtResource("3_iywne")
+hex_grid = NodePath("../HexGrid")
+metadata/_custom_type_script = "uid://brplrnxve1ick"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1390325344]
 transform = Transform3D(1, 0, 0, 0, 0.6468431, 0.7626232, 0, -0.7626232, 0.6468431, -0.16439533, 5.3601527, 4.1066847)

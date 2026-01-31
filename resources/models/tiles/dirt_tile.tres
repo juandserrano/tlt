@@ -1,6 +1,8 @@
 [gd_resource type="ArrayMesh" format=4 uid="uid://gojuq5k2p20i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4uxq"]
+resource_name = "dirt"
+cull_mode = 2
 vertex_color_use_as_albedo = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_881oq"]
