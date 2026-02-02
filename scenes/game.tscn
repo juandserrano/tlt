@@ -55,7 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
 cast_shadow = 0
 multimesh = SubResource("MultiMesh_gee14")
 script = ExtResource("3_iywne")
-grass_count_per_hex = 1500
+grass_count_per_hex = 500
 hex_grid = NodePath("../HexGrid")
 metadata/_custom_type_script = "uid://brplrnxve1ick"
 

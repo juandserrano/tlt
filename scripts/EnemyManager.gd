@@ -1,7 +1,6 @@
 class_name EnemyManager extends Node
 
 @export var player_tower: Player
-
 @export var audio_stream_player: AudioStreamPlayer
 
 var enemies_in_play: Array[Enemy]
@@ -38,7 +37,7 @@ func _on_enemy_died(enemy: Enemy):
 		enemy.shrink_and_free_enemy()
 	
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("spawn_enemy"):
+	if GameManager.state == GameManager.GameState.Spawning and Input.is_action_just_pressed("spawn_enemy"):
 		spawn_round_wave(1)
 
 func spawn_round_wave(round_number: int):
@@ -49,6 +48,7 @@ func spawn_round_wave(round_number: int):
 				spawn_enemy_of_class(EnemyClass.values().pick_random())
 			)
 			tween.tween_interval(0.2)
+	tween.tween_callback(func(): GameManager.state = GameManager.GameState.PlayerTurn)
 
 func _on_enemy_hit_ground():
 	audio_stream_player.stream = sound_falling_impact
