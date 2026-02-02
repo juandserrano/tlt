@@ -30,8 +30,9 @@ func _process(_delta: float) -> void:
 		spawn_round_wave(1)
 
 func spawn_round_wave(round_number: int):
-	spawn_enemy_of_class(EnemyClass.values().pick_random())
-	pass
+	if round_number == 1:
+		for i in range(3):
+			spawn_enemy_of_class(EnemyClass.values().pick_random())
 
 
 func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
@@ -49,7 +50,7 @@ func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 	
 	enemies_container.add_child(enemy)
 	enemies_in_play.append(enemy)
-	var spawn_pos = get_random_hex_at_distance(SPAWN_RADIUS) 
+	var spawn_pos = get_random_hex_at_distance(SPAWN_RADIUS)
 	enemy.spawn_above_ground(spawn_pos.x, spawn_pos.y)
 
 # Called when the node enters the scene tree for the first time.
@@ -75,4 +76,4 @@ func get_random_hex_at_distance(distance: int) -> Vector2i:
 	if possible_coords.size() > 0:
 		return possible_coords[randi() % possible_coords.size()]
 	else:
-		return Vector2i(0, 0)  # Fallback (shouldn't happen for distance > 0)
+		return Vector2i(0, 0) # Fallback (shouldn't happen for distance > 0)
