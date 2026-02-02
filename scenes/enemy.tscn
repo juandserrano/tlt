@@ -1,8 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://ch14u6uuib5ax"]
+[gd_scene format=3 uid="uid://ch14u6uuib5ax"]
 
 [ext_resource type="Script" uid="uid://8e8rp5rw5yc7" path="res://scripts/enemy.gd" id="1_md0e3"]
-[ext_resource type="PackedScene" uid="uid://13mgsiy6icow" path="res://resources/models/enemies/pawn.glb" id="2_4ra3w"]
+[ext_resource type="ArrayMesh" uid="uid://m5hkh3cpt1qb" path="res://resources/models/enemies/pawn_mesh.tres" id="2_md0e3"]
 
-[node name="Enemy" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_4ra3w"]
+size = Vector3(0.59332275, 1, 1)
+
+[node name="Enemy" type="CharacterBody3D" unique_id=2129811770]
 script = ExtResource("1_md0e3")
-model = ExtResource("2_4ra3w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=237342110]
+mesh = ExtResource("2_md0e3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1938530564]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007171631, 0.4989884, 0)
+shape = SubResource("BoxShape3D_4ra3w")
+
+[connection signal="mouse_entered" from="." to="." method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_area_3d_mouse_exited"]

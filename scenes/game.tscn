@@ -4,15 +4,14 @@
 [ext_resource type="Shader" uid="uid://cs8utkdgsnohq" path="res://resources/models/tiles/grass_mesh.gdshader" id="2_iywne"]
 [ext_resource type="Script" uid="uid://di3wir2ct75ay" path="res://scripts/camera.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://brplrnxve1ick" path="res://scripts/grass_multimesh.gd" id="3_iywne"]
-[ext_resource type="PackedScene" uid="uid://13mgsiy6icow" path="res://resources/models/enemies/pawn.glb" id="3_lnu2h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
 shader = ExtResource("2_iywne")
-shader_parameter/top_color = Color(0, 0.681845, 0, 1)
-shader_parameter/bottom_color = Color(0.20384946, 0.59637594, 0.2055093, 1)
-shader_parameter/wind_speed = 0.2
-shader_parameter/wind_strength = 0.125
+shader_parameter/top_color = Color(1.7808378e-06, 0.5252567, 1.92523e-07, 1)
+shader_parameter/bottom_color = Color(0.156263, 0.46321052, 0.15556556, 1)
+shader_parameter/wind_speed = 1.0
+shader_parameter/wind_strength = 0.12
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5sy4"]
 material = SubResource("ShaderMaterial_iywne")
@@ -20,7 +19,6 @@ size = Vector2(0.005, 0.09)
 
 [sub_resource type="MultiMesh" id="MultiMesh_gee14"]
 transform_format = 1
-use_colors = true
 mesh = SubResource("QuadMesh_u5sy4")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lnu2h"]
@@ -34,18 +32,19 @@ sky = SubResource("Sky_lbhrr")
 
 [node name="Game" type="Node3D" unique_id=2003645501]
 
-[node name="HexGrid" parent="." unique_id=1275277607 instance=ExtResource("1_lnu2h")]
+[node name="HexGrid" parent="." unique_id=1275277607 node_paths=PackedStringArray("pawn") instance=ExtResource("1_lnu2h")]
 grid_radius = 7
-tile_size = 0.58
 noise_threshold = 0.1
 grass_color = Color(0.022281587, 0.15265098, 3.6098065e-08, 1)
 dirt_color = Color(0.10482413, 0.03586611, 0, 1)
+pawn = NodePath("")
 
 [node name="GrassPatch" type="MultiMeshInstance3D" parent="." unique_id=33840693 node_paths=PackedStringArray("hex_grid")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
 cast_shadow = 0
 multimesh = SubResource("MultiMesh_gee14")
 script = ExtResource("3_iywne")
+grass_count_per_hex = 1500
 hex_grid = NodePath("../HexGrid")
 metadata/_custom_type_script = "uid://brplrnxve1ick"
 
@@ -61,5 +60,3 @@ environment = SubResource("Environment_iywne")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1179564163]
 transform = Transform3D(0.6092736, -0.51093364, 0.60640955, -3.5527137e-15, 0.76474154, 0.6443371, -0.79296, -0.39257762, 0.46593684, 0, 6.8801084, 4.7083044)
 shadow_enabled = true
-
-[node name="pawn" parent="." unique_id=24206659 instance=ExtResource("3_lnu2h")]
