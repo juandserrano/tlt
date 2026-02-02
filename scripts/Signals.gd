@@ -51,7 +51,7 @@ signal combat_started(enemy: Enemy)
 signal combat_ended(victory: bool)
 
 # Emitted when an attack is performed
-signal attack_performed(attacker: Node3D, target: Node3D, damage: int)
+signal enemy_attacked_player(attacker: Enemy, damage: int)
 
 # ============================================================================
 # TURN MANAGEMENT SIGNALS
@@ -61,7 +61,7 @@ signal attack_performed(attacker: Node3D, target: Node3D, damage: int)
 signal turn_started(turn_number: int, is_player_turn: bool)
 
 # Emitted when a turn ends
-signal turn_ended(turn_number: int, is_player_turn: bool)
+signal player_turn_ended()
 
 # Emitted when player's turn begins
 signal player_turn_started()

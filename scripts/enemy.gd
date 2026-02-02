@@ -74,3 +74,6 @@ func _on_area_3d_mouse_entered() -> void:
 
 func _on_area_3d_mouse_exited() -> void:
 	is_mouse_over = false
+
+func melee_attack_player():
+	Signals.enemy_attacked_player.emit(self, 1)

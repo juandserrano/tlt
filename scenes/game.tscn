@@ -5,7 +5,9 @@
 [ext_resource type="Script" uid="uid://di3wir2ct75ay" path="res://scripts/camera.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://brplrnxve1ick" path="res://scripts/grass_multimesh.gd" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://7vp3ydmp2hop" path="res://scenes/PlayerTower.tscn" id="5_iywne"]
+[ext_resource type="Script" uid="uid://466dhj4b1y6c" path="res://scripts/player.gd" id="6_gee14"]
 [ext_resource type="Script" uid="uid://0ma1s2301j4v" path="res://scripts/EnemyManager.gd" id="6_p57ef"]
+[ext_resource type="Script" uid="uid://dtxb477ydsldy" path="res://scripts/GameManager.gd" id="6_u5sy4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
@@ -102,10 +104,16 @@ shadow_enabled = true
 shadow_opacity = 0.8
 
 [node name="PlayerTower" parent="." unique_id=288103671 instance=ExtResource("5_iywne")]
+script = ExtResource("6_gee14")
 
-[node name="EnemyManager" type="Node" parent="." unique_id=297754155 node_paths=PackedStringArray("audio_stream_player")]
+[node name="EnemyManager" type="Node" parent="." unique_id=297754155 node_paths=PackedStringArray("player_tower", "audio_stream_player")]
 script = ExtResource("6_p57ef")
-audio_stream_player = NodePath("../AudioStreamPlayer")
+player_tower = NodePath("../PlayerTower")
+audio_stream_player = NodePath("../AudioManager")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1458617067]
+[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager")]
+script = ExtResource("6_u5sy4")
+enemy_manager = NodePath("../EnemyManager")
+
+[node name="AudioManager" type="AudioStreamPlayer" parent="." unique_id=1458617067]
 volume_db = -10.339

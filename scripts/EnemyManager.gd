@@ -1,4 +1,6 @@
-extends Node
+class_name EnemyManager extends Node
+
+@export var player_tower: Player
 
 @export var audio_stream_player: AudioStreamPlayer
 
@@ -89,8 +91,8 @@ func get_random_free_hex_at_distance(distance: int) -> Vector2i:
 	for q in range(-distance, distance + 1):
 		for r in range(-distance, distance + 1):
 			# Calculate hex distance using axial coordinate formula
-			var hex_distance = (abs(q) + abs(r) + abs(q + r)) / 2
-			if hex_distance == distance and not is_tile_occupied(q, r):
+			var dist = (abs(q) + abs(r) + abs(q + r)) / 2
+			if dist == distance and not is_tile_occupied(q, r):
 				possible_coords.append(Vector2i(q, r))
 	
 	# Pick a random coordinate from the list
@@ -104,3 +106,57 @@ func is_tile_occupied(q: int, r: int) -> bool:
 		if enemy.current_tile == Vector2i(q, r):
 			return true
 	return false
+
+func enemies_move_or_attack():
+	for enemy in enemies_in_play:
+		#Check if enemy is at striking distance from player
+		if hex_distance(enemy.current_tile, player_tower.current_tile) == 1:
+			enemy.melee_attack_player()
+			continue
+
+		# Otherwise try to move
+		var sorted_neighbors = get_neighbors_sorted_by_distance(enemy.current_tile, player_tower.current_tile)
+		
+		# Try each neighbor in order of closeness to target
+		var moved = false
+		for neighbor in sorted_neighbors:
+			if not is_tile_occupied(neighbor.x, neighbor.y):
+				enemy.move_to_tile(neighbor.x, neighbor.y)
+				moved = true
+				break
+		
+		# If no valid move found, enemy stays in place
+		if not moved:
+			pass # Enemy cannot move this turn
+
+# Returns all neighboring tiles sorted by distance to target (closest first)
+func get_neighbors_sorted_by_distance(from_tile: Vector2i, target_coord: Vector2i) -> Array[Vector2i]:
+	# Define the 6 neighbors in axial coordinates for hexagonal grids
+	var neighbors: Array[Vector2i] = [
+		Vector2i(from_tile.x + 1, from_tile.y), # East
+		Vector2i(from_tile.x - 1, from_tile.y), # West
+		Vector2i(from_tile.x, from_tile.y + 1), # Southeast
+		Vector2i(from_tile.x, from_tile.y - 1), # Northwest
+		Vector2i(from_tile.x + 1, from_tile.y - 1), # Northeast
+		Vector2i(from_tile.x - 1, from_tile.y + 1) # Southwest
+	]
+	
+	# Create array of [neighbor, distance] pairs
+	var neighbor_distances: Array = []
+	for neighbor in neighbors:
+		var distance = hex_distance(neighbor, target_coord)
+		neighbor_distances.append({"tile": neighbor, "distance": distance})
+	
+	# Sort by distance (ascending)
+	neighbor_distances.sort_custom(func(a, b): return a["distance"] < b["distance"])
+	
+	# Extract just the tiles in sorted order
+	var sorted_neighbors: Array[Vector2i] = []
+	for item in neighbor_distances:
+		sorted_neighbors.append(item["tile"])
+	
+	return sorted_neighbors
+
+# Calculate hexagonal distance between two axial coordinates
+func hex_distance(a: Vector2i, b: Vector2i) -> int:
+	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
