@@ -76,4 +76,11 @@ func _on_area_3d_mouse_exited() -> void:
 	is_mouse_over = false
 
 func melee_attack_player():
-	Signals.enemy_attacked_player.emit(self, 1)
+	var starting_pos = position
+	# Target 20% of the way to (0,0,0)
+	var target_pos = position.lerp(Vector3.ZERO, 0.2) # 20% of the way there
+	
+	var tween = create_tween()
+	tween.tween_property(self, "position", target_pos, 0.1)
+	Signals.enemy_attacked_player.emit(self, target_pos, 1)
+	tween.tween_property(self, "position", starting_pos, 0.1)

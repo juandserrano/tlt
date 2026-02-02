@@ -51,7 +51,7 @@ signal combat_started(enemy: Enemy)
 signal combat_ended(victory: bool)
 
 # Emitted when an attack is performed
-signal enemy_attacked_player(attacker: Enemy, damage: int)
+signal enemy_attacked_player(attacker: Enemy, impact_pos: Vector3, damage: int)
 
 # ============================================================================
 # TURN MANAGEMENT SIGNALS

@@ -110,8 +110,9 @@ func is_tile_occupied(q: int, r: int) -> bool:
 func enemies_move_or_attack():
 	for enemy in enemies_in_play:
 		#Check if enemy is at striking distance from player
-		if hex_distance(enemy.current_tile, player_tower.current_tile) == 1:
+		if hex_distance(enemy.current_tile, player_tower.current_tile) == 2:
 			enemy.melee_attack_player()
+			await get_tree().create_timer(0.1).timeout
 			continue
 
 		# Otherwise try to move
@@ -122,6 +123,7 @@ func enemies_move_or_attack():
 		for neighbor in sorted_neighbors:
 			if not is_tile_occupied(neighbor.x, neighbor.y):
 				enemy.move_to_tile(neighbor.x, neighbor.y)
+				await get_tree().create_timer(0.1).timeout
 				moved = true
 				break
 		

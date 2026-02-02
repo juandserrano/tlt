@@ -1,8 +1,13 @@
 shader_type spatial;
-render_mode cull_disabled;
+// Optimization: Use separate render modes to disable expensive PBR features
+// diffuse_lambert: Cheaper diffuse calculation than the default (Burley)
+// specular_disabled: Removes all specular/reflection calculations (grass is usually rough)
+render_mode cull_disabled, diffuse_lambert, specular_disabled;
 
 uniform vec3 top_color : source_color = vec3(0.2, 0.6, 0.1);
 uniform vec3 bottom_color : source_color = vec3(0.1, 0.3, 0.05);
+
+// Optimization: Use constants if these don't need to change at runtime for better compiler optimization
 uniform float wind_speed = 2.0;
 uniform float wind_strength = 0.15;
 
@@ -20,11 +25,9 @@ void vertex() {
     VERTEX.z += wind * wind_strength * mask;
     
     // 4. "Pinch" the top vertices together to make a triangle shape
-    // This moves the top left and top right vertices toward the center
-    if (UV.y < 0.1) {
-        VERTEX.x *= 0.1; 
-    }
-	
+    // Optimization: Use mix/step for branchless logic (avoids branching on GPU)
+    // If UV.y < 0.1 (top tip), scale x by 0.1
+    VERTEX.x *= mix(0.1, 1.0, step(0.1, UV.y));
 }
 
 void fragment() {

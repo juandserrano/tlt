@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://466dhj4b1y6c" path="res://scripts/player.gd" id="6_gee14"]
 [ext_resource type="Script" uid="uid://0ma1s2301j4v" path="res://scripts/EnemyManager.gd" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://dtxb477ydsldy" path="res://scripts/GameManager.gd" id="6_u5sy4"]
+[ext_resource type="Script" uid="uid://d3aeukmw5pr1y" path="res://scripts/ParticleManager.gd" id="9_0tnpc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
@@ -111,9 +112,14 @@ script = ExtResource("6_p57ef")
 player_tower = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
 
-[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager")]
+[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager", "player", "audio_stream_player")]
 script = ExtResource("6_u5sy4")
 enemy_manager = NodePath("../EnemyManager")
+player = NodePath("../PlayerTower")
+audio_stream_player = NodePath("../AudioManager")
 
 [node name="AudioManager" type="AudioStreamPlayer" parent="." unique_id=1458617067]
 volume_db = -10.339
+
+[node name="ParticleManager" type="Node" parent="." unique_id=750923537]
+script = ExtResource("9_0tnpc")

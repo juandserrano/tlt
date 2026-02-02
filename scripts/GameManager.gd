@@ -1,6 +1,9 @@
 class_name GameManager extends Node
 
 @export var enemy_manager: EnemyManager
+@export var player: Player
+@export var audio_stream_player: AudioStreamPlayer
+const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
 enum GameState {
   MainMenu,
@@ -13,15 +16,40 @@ enum GameState {
 
 static var state: GameState
 var round_number: int
+var processing_enemies: bool = false
+
+func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
+  player.damage_player(damage)
+  print(impact_pos)
+  audio_stream_player.stream = sound_falling_impact
+  audio_stream_player.play()
+
 
 func _ready() -> void:
+  Signals.enemy_attacked_player.connect(_on_enemy_attacked_player)
   state = GameState.Spawning
 
 func _process(_delta: float) -> void:
-  if state == GameState.PlayerTurn and Input.is_action_just_pressed("next turn"):
-   next_turn()
-   state = GameState.Spawning
+  match state:
+    GameState.Spawning:
+      pass
+    GameState.PlayerTurn:
+      do_player_turn()
+    GameState.Resolve:
+      do_resolve_phase()
+    GameState.EnemiesTurn:
+      do_enemies_turn()
 
-func next_turn():
-  enemy_manager.enemies_move_or_attack()
-  pass
+func do_player_turn():
+  if Input.is_action_just_pressed("next turn"):
+    state = GameState.Resolve
+
+func do_enemies_turn():
+  if processing_enemies: return
+  processing_enemies = true
+  await enemy_manager.enemies_move_or_attack()
+  state = GameState.Spawning
+  processing_enemies = false
+
+func do_resolve_phase() -> void:
+  state = GameState.EnemiesTurn
