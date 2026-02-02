@@ -13,6 +13,11 @@ const DEFAULT_TILE_SIZE: float = 0.58
 		noise_threshold = value
 		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
 			setup_grid() # Adjust this to change green/brown balance
+@export var noise_frequency: float = 0.05:
+	set(value):
+		noise_frequency = value
+		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
+			setup_grid() # Adjust this to change green/brown balance
 @export var grass_color: Color = Color(0, 0.4, 0, 1):
 	set(value):
 		grass_color = value
@@ -32,11 +37,12 @@ var tiles: Array[Vector3]
 func _ready():
 	# Configure Noise
 	noise.seed = randi()
-	noise.frequency = 0.1 # Lower = larger "blobs" of color
+	noise.frequency = noise_frequency # Lower = larger "blobs" of color
 	
 	setup_grid()
 
 func setup_grid():
+	noise.frequency = noise_frequency # Lower = larger "blobs" of color
 	var hex_count = 3 * grid_radius * (grid_radius + 1) + 1
 	#multimesh.use_colors = true # Essential for per-instance coloring
 	multimesh.instance_count = hex_count

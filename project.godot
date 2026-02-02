@@ -22,7 +22,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 Global="*uid://csgrdwakt0io"
 GameState="*uid://dtxb477ydsldy"
-EnemyManager="*uid://0ma1s2301j4v"
+Signals="*uid://ccrlfcu2jdy7e"
 
 [display]
 

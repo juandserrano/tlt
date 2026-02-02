@@ -1,5 +1,7 @@
 extends Node
 
+@export var audio_stream_player: AudioStreamPlayer
+
 var enemies_in_play: Array[Enemy]
 var enemy_bag: Array[Enemy]
 var enemies_container: Node3D # Container to hold all enemy scene instances
@@ -7,6 +9,8 @@ var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
 var pawn_mesh = preload("res://resources/models/enemies/pawn_mesh.tres")
 var knight_mesh = preload("res://resources/models/enemies/knight_mesh.tres")
 var bishop_mesh = preload("res://resources/models/enemies/bishop_mesh.tres")
+
+const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
 const SPAWN_RADIUS: int = 10
 
@@ -25,15 +29,28 @@ enum EnemyVariant {
 	Armored
 }
 
+func _on_enemy_died(enemy: Enemy):
+	# Remove from EnemyManager's tracking array
+	if enemies_in_play.has(enemy):
+		enemies_in_play.erase(enemy)
+		enemy.shrink_and_free_enemy()
+	
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("spawn_enemy"):
 		spawn_round_wave(1)
 
 func spawn_round_wave(round_number: int):
+	var tween = create_tween()
 	if round_number == 1:
 		for i in range(3):
-			spawn_enemy_of_class(EnemyClass.values().pick_random())
+			tween.tween_callback(func():
+				spawn_enemy_of_class(EnemyClass.values().pick_random())
+			)
+			tween.tween_interval(0.2)
 
+func _on_enemy_hit_ground():
+	audio_stream_player.stream = sound_falling_impact
+	audio_stream_player.play()
 
 func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 	var enemy = enemy_scene.instantiate() as Enemy
@@ -50,18 +67,22 @@ func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 	
 	enemies_container.add_child(enemy)
 	enemies_in_play.append(enemy)
-	var spawn_pos = get_random_hex_at_distance(SPAWN_RADIUS)
+	var spawn_pos = get_random_free_hex_at_distance(SPAWN_RADIUS)
 	enemy.spawn_above_ground(spawn_pos.x, spawn_pos.y)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	#Subscribe to signals
+	Signals.enemy_died.connect(_on_enemy_died)
+	Signals.enemy_hit_ground.connect(_on_enemy_hit_ground)
+
 	# Create and add the container for enemy instances
 	enemies_container = Node3D.new()
 	enemies_container.name = "EnemiesContainer"
 	add_child(enemies_container)
 
 # Get a random hexagonal coordinate at exactly 'distance' tiles from origin (0, 0)
-func get_random_hex_at_distance(distance: int) -> Vector2i:
+func get_random_free_hex_at_distance(distance: int) -> Vector2i:
 	var possible_coords: Array[Vector2i] = []
 	
 	# Generate all hexes at exactly this distance
@@ -69,7 +90,7 @@ func get_random_hex_at_distance(distance: int) -> Vector2i:
 		for r in range(-distance, distance + 1):
 			# Calculate hex distance using axial coordinate formula
 			var hex_distance = (abs(q) + abs(r) + abs(q + r)) / 2
-			if hex_distance == distance:
+			if hex_distance == distance and not is_tile_occupied(q, r):
 				possible_coords.append(Vector2i(q, r))
 	
 	# Pick a random coordinate from the list
@@ -77,3 +98,9 @@ func get_random_hex_at_distance(distance: int) -> Vector2i:
 		return possible_coords[randi() % possible_coords.size()]
 	else:
 		return Vector2i(0, 0) # Fallback (shouldn't happen for distance > 0)
+	
+func is_tile_occupied(q: int, r: int) -> bool:
+	for enemy in enemies_in_play:
+		if enemy.current_tile == Vector2i(q, r):
+			return true
+	return false
