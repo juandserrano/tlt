@@ -78,11 +78,12 @@ script = ExtResource("6_p57ef")
 player_tower = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
 
-[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager", "player", "audio_stream_player")]
+[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager", "player", "audio_stream_player", "particle_manager")]
 script = ExtResource("6_u5sy4")
 enemy_manager = NodePath("../EnemyManager")
 player = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
+particle_manager = NodePath("../ParticleManager")
 
 [node name="AudioManager" type="AudioStreamPlayer" parent="." unique_id=1458617067]
 volume_db = -10.339

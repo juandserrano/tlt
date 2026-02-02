@@ -44,7 +44,7 @@ func spawn_round_wave(round_number: int):
 				spawn_enemy_of_class(EnemyClass.values().pick_random())
 			)
 			tween.tween_interval(0.2)
-	# tween.tween_callback(func(): GameManager.state = GameManager.GameState.PlayerTurn)
+	
 	GameManager.state = GameManager.GameState.PlayerTurn
 
 func _on_enemy_hit_ground():

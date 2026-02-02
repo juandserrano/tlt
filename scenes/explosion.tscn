@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://suhht002j2tu"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0tnpc"]
+direction = Vector3(0.06, 1.08, 0)
+spread = 20.25
+initial_velocity_min = 6.0
+initial_velocity_max = 10.83
+gravity = Vector3(0, -15.43, 0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3oo6d"]
+radius = 0.05
+height = 0.1
+
+[node name="Explosion" type="GPUParticles3D" unique_id=2032957157]
+emitting = false
+amount = 20
+lifetime = 2.97
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_0tnpc")
+draw_pass_1 = SubResource("SphereMesh_3oo6d")
