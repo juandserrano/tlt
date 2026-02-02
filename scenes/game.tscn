@@ -26,9 +26,6 @@ size = Vector2(0.005, 0.09)
 transform_format = 1
 mesh = SubResource("QuadMesh_u5sy4")
 
-[sub_resource type="FogMaterial" id="FogMaterial_iywne"]
-density = 3.6182
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lnu2h"]
 
 [sub_resource type="Sky" id="Sky_lbhrr"]
@@ -37,7 +34,6 @@ sky_material = SubResource("ProceduralSkyMaterial_lnu2h")
 [sub_resource type="Environment" id="Environment_iywne"]
 background_mode = 2
 sky = SubResource("Sky_lbhrr")
-volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
 
 [node name="Game" type="Node3D" unique_id=2003645501]
@@ -56,39 +52,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
 cast_shadow = 0
 multimesh = SubResource("MultiMesh_gee14")
 script = ExtResource("3_iywne")
-grass_count_per_hex = 500
+grass_count_per_hex = 250
 hex_grid = NodePath("../HexGrid")
 metadata/_custom_type_script = "uid://brplrnxve1ick"
-
-[node name="FogVolume" type="FogVolume" parent="World" unique_id=898285711]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009073973, 1.850254, 12.807504)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
-
-[node name="FogVolume2" type="FogVolume" parent="World" unique_id=990337138]
-transform = Transform3D(0.54474145, 0, 0.83860403, 0, 1, 0, -0.83860403, 0, 0.54474145, 11.365, 1.85, 6.889)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
-
-[node name="FogVolume" type="FogVolume" parent="World/FogVolume2" unique_id=1690438479]
-transform = Transform3D(0.526659, 0, 0.8500765, 0, 1, 0, -0.8500765, 0, 0.526659, 11.367, 0, -6.987)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
-
-[node name="FogVolume" type="FogVolume" parent="World/FogVolume2/FogVolume" unique_id=908297134]
-transform = Transform3D(0.42315605, 0, 0.9060571, 0, 1, 0, -0.9060571, 0, 0.42315605, 12.377, 0, -7.239)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
-
-[node name="FogVolume" type="FogVolume" parent="World/FogVolume2/FogVolume/FogVolume" unique_id=780445738]
-transform = Transform3D(0.46318784, 0, 0.8862602, 0, 1, 0, -0.8862602, 0, 0.46318784, 11.9186735, 0, -7.3170238)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
-
-[node name="FogVolume" type="FogVolume" parent="World/FogVolume2/FogVolume/FogVolume/FogVolume" unique_id=437706603]
-transform = Transform3D(0.60208005, 0, 0.79843616, 0, 1, 0, -0.79843616, 0, 0.60208005, 11.556368, 0, -7.5500116)
-size = Vector3(14.314941, 2.2485352, 4.54541)
-material = SubResource("FogMaterial_iywne")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1390325344]
 transform = Transform3D(1, 0, 0, 0, 0.6468431, 0.7626232, 0, -0.7626232, 0.6468431, 0, 12.975, 10.457)

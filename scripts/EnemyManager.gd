@@ -36,10 +36,6 @@ func _on_enemy_died(enemy: Enemy):
 		enemies_in_play.erase(enemy)
 		enemy.shrink_and_free_enemy()
 	
-func _process(_delta: float) -> void:
-	if GameManager.state == GameManager.GameState.Spawning and Input.is_action_just_pressed("spawn_enemy"):
-		spawn_round_wave(1)
-
 func spawn_round_wave(round_number: int):
 	var tween = create_tween()
 	if round_number == 1:
@@ -48,7 +44,8 @@ func spawn_round_wave(round_number: int):
 				spawn_enemy_of_class(EnemyClass.values().pick_random())
 			)
 			tween.tween_interval(0.2)
-	tween.tween_callback(func(): GameManager.state = GameManager.GameState.PlayerTurn)
+	# tween.tween_callback(func(): GameManager.state = GameManager.GameState.PlayerTurn)
+	GameManager.state = GameManager.GameState.PlayerTurn
 
 func _on_enemy_hit_ground():
 	audio_stream_player.stream = sound_falling_impact

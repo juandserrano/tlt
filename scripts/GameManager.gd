@@ -32,13 +32,16 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
   match state:
     GameState.Spawning:
-      pass
+      do_spawn_phase()
     GameState.PlayerTurn:
       do_player_turn()
     GameState.Resolve:
       do_resolve_phase()
     GameState.EnemiesTurn:
       do_enemies_turn()
+
+func do_spawn_phase():
+  enemy_manager.spawn_round_wave(1)
 
 func do_player_turn():
   if Input.is_action_just_pressed("next turn"):
