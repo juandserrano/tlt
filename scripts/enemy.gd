@@ -1,6 +1,10 @@
 class_name Enemy
 extends Node3D
 
+const SPAWN_HEIGHT: int = 10
+
+@onready var grid: HexGrid = $"/root/Game/World/HexGrid"
+
 # Tile-based position tracking
 var current_tile: Vector2i # Stores the axial coordinates (q, r)
 
@@ -16,7 +20,7 @@ func move_to_tile(q: int, r: int):
 	# Update tile position
 	current_tile = Vector2i(q, r)
 	# Get world position for this tile
-	var world_pos = Global.axial_to_world(q, r)
+	var world_pos = grid.axial_to_world(q, r)
 	
 	# Animate to the new position
 	var tween = create_tween()
@@ -28,8 +32,8 @@ func move_to_tile(q: int, r: int):
 func spawn_above_ground(q: int, r: int):
 	# Set position without animation (for spawning)
 	current_tile = Vector2i(q, r)
-	position = Global.axial_to_world(q, r)
-	position.y = 4
+	position = grid.axial_to_world(q, r)
+	position.y = SPAWN_HEIGHT
 	fall_after_spawn()
 
 

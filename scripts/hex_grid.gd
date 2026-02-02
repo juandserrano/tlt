@@ -1,4 +1,7 @@
+@tool
 class_name HexGrid extends MultiMeshInstance3D
+
+const DEFAULT_TILE_SIZE: float = 0.58
 
 @export var grid_radius: int = 20:
 	set(value):
@@ -33,7 +36,6 @@ func _ready():
 	
 	setup_grid()
 
-
 func setup_grid():
 	var hex_count = 3 * grid_radius * (grid_radius + 1) + 1
 	#multimesh.use_colors = true # Essential for per-instance coloring
@@ -45,7 +47,7 @@ func setup_grid():
 		var r2 = min(grid_radius, -q + grid_radius)
 		for r in range(r1, r2 + 1):
 			# 1. Position
-			var pos = Global.axial_to_world(q, r)
+			var pos = axial_to_world(q, r)
 			multimesh.set_instance_transform(index, Transform3D(Basis(), pos))
 			
 			# 2. Color based on Noise
@@ -57,3 +59,8 @@ func setup_grid():
 			multimesh.set_instance_color(index, color)
 			
 			index += 1
+
+func axial_to_world(q: int, r: int) -> Vector3:
+	var x = DEFAULT_TILE_SIZE * (sqrt(3.0) * q + sqrt(3.0) / 2.0 * r)
+	var z = DEFAULT_TILE_SIZE * (3.0 / 2.0 * r)
+	return Vector3(x, 0, z)

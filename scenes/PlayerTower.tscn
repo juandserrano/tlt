@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://7vp3ydmp2hop"]
+
+[ext_resource type="ArrayMesh" uid="uid://cvfwkjh6a8x0w" path="res://resources/models/castle/player_tower.tres" id="1_63j88"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7u1no"]
+size = Vector3(1.7105103, 3.6321716, 1.7633362)
+
+[node name="PlayerTower" type="StaticBody3D" unique_id=288103671]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1955305886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0105896, 1.820819, -0.00010681152)
+shape = SubResource("BoxShape3D_7u1no")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=842060863]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)
+mesh = ExtResource("1_63j88")
