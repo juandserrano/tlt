@@ -22,7 +22,6 @@ var processing_enemies: bool = false
 
 func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
 	player.damage_player(damage)
-	print(impact_pos)
 	if particle_manager:
 		particle_manager.spawn_explosion(impact_pos)
 	audio_stream_player.stream = sound_falling_impact
