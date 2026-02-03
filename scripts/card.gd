@@ -1,6 +1,7 @@
 class_name Card extends Area3D
 
 var is_mouse_over: bool = false
+var is_selected: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,3 +19,6 @@ func _on_area_3d_mouse_entered() -> void:
 func _on_area_3d_mouse_exited() -> void:
 	is_mouse_over = false
 	print("exited")
+
+func toggle_select_card():
+	is_selected = !is_selected

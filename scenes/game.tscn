@@ -95,3 +95,5 @@ script = ExtResource("9_0tnpc")
 
 [node name="CardManager" type="Node3D" parent="." unique_id=70929230]
 script = ExtResource("10_vtaks")
+card_y = -1.0
+card_z = -2.4050000000000002
