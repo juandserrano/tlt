@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://0ma1s2301j4v" path="res://scripts/EnemyManager.gd" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://dtxb477ydsldy" path="res://scripts/GameManager.gd" id="6_u5sy4"]
 [ext_resource type="Script" uid="uid://d3aeukmw5pr1y" path="res://scripts/ParticleManager.gd" id="9_0tnpc"]
+[ext_resource type="Script" uid="uid://daiqnvt8muuy1" path="res://scripts/CardManager.gd" id="10_vtaks"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
@@ -36,7 +37,7 @@ background_mode = 2
 sky = SubResource("Sky_lbhrr")
 volumetric_fog_density = 0.0
 
-[node name="Game" type="Node3D" unique_id=2003645501]
+[node name="Game" type="Node" unique_id=1229110980]
 
 [node name="World" type="Node3D" parent="." unique_id=1996604365]
 
@@ -58,6 +59,7 @@ metadata/_custom_type_script = "uid://brplrnxve1ick"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1390325344]
 transform = Transform3D(1, 0, 0, 0, 0.6468431, 0.7626232, 0, -0.7626232, 0.6468431, 0, 12.975, 10.457)
+current = true
 script = ExtResource("2_yqjtg")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1473826979]
@@ -90,3 +92,6 @@ volume_db = -10.339
 
 [node name="ParticleManager" type="Node" parent="." unique_id=750923537]
 script = ExtResource("9_0tnpc")
+
+[node name="CardManager" type="Node3D" parent="." unique_id=70929230]
+script = ExtResource("10_vtaks")

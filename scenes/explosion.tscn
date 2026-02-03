@@ -48,7 +48,7 @@ bottom_radius = 0.0
 height = 0.2
 radial_segments = 10
 
-[node name="Node3D" type="Node3D" unique_id=218988595]
+[node name="Explosion" type="Node3D" unique_id=218988595]
 
 [node name="Debris" type="GPUParticles3D" parent="." unique_id=2032957157]
 emitting = false

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bbcqlh8frux75"]
+
+[ext_resource type="Script" uid="uid://b61lo8dsnnu64" path="res://scripts/card.gd" id="1_yiag5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yiag5"]
+albedo_color = Color(0.5642663, 0.72955066, 0.95840186, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yiag5"]
+material = SubResource("StandardMaterial3D_yiag5")
+size = Vector3(0.75, 1, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tgmmg"]
+size = Vector3(0.75, 1, 0.02)
+
+[node name="Card" type="Area3D" unique_id=1727368519]
+script = ExtResource("1_yiag5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=409752649]
+mesh = SubResource("BoxMesh_yiag5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=727743968]
+shape = SubResource("BoxShape3D_tgmmg")
+
+[connection signal="mouse_entered" from="." to="." method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_area_3d_mouse_exited"]
