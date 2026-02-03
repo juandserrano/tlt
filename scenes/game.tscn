@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dtxb477ydsldy" path="res://scripts/GameManager.gd" id="6_u5sy4"]
 [ext_resource type="Script" uid="uid://d3aeukmw5pr1y" path="res://scripts/ParticleManager.gd" id="9_0tnpc"]
 [ext_resource type="Script" uid="uid://daiqnvt8muuy1" path="res://scripts/CardManager.gd" id="10_vtaks"]
+[ext_resource type="PackedScene" uid="uid://bbcqlh8frux75" path="res://scenes/Card.tscn" id="11_kvpfn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
@@ -93,7 +94,45 @@ volume_db = -10.339
 [node name="ParticleManager" type="Node" parent="." unique_id=750923537]
 script = ExtResource("9_0tnpc")
 
-[node name="CardManager" type="Node3D" parent="." unique_id=70929230]
+[node name="CardManager" type="Node" parent="." unique_id=581396432]
 script = ExtResource("10_vtaks")
-card_y = -1.0
-card_z = -2.4050000000000002
+
+[node name="GameplayUI" type="Control" parent="." unique_id=355403282]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridContainer" type="HBoxContainer" parent="GameplayUI" unique_id=2038656263]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -507.0
+offset_top = -262.0
+offset_right = 509.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+alignment = 1
+
+[node name="Card" parent="GameplayUI/GridContainer" unique_id=1812739938 instance=ExtResource("11_kvpfn")]
+layout_mode = 2
+
+[node name="Card2" parent="GameplayUI/GridContainer" unique_id=716911792 instance=ExtResource("11_kvpfn")]
+layout_mode = 2
+
+[node name="Card3" parent="GameplayUI/GridContainer" unique_id=1719709428 instance=ExtResource("11_kvpfn")]
+layout_mode = 2
+
+[node name="Card4" parent="GameplayUI/GridContainer" unique_id=1854607761 instance=ExtResource("11_kvpfn")]
+layout_mode = 2
+
+[node name="Card5" parent="GameplayUI/GridContainer" unique_id=1038437612 instance=ExtResource("11_kvpfn")]
+layout_mode = 2

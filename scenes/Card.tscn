@@ -1,26 +1,27 @@
 [gd_scene format=3 uid="uid://bbcqlh8frux75"]
 
 [ext_resource type="Script" uid="uid://b61lo8dsnnu64" path="res://scripts/card.gd" id="1_yiag5"]
+[ext_resource type="Texture2D" uid="uid://bgwl8j17ep2rp" path="res://resources/textures/cards/attack_pawn.png" id="2_tgmmg"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yiag5"]
-albedo_color = Color(0.5642663, 0.72955066, 0.95840186, 1)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4dx8l"]
+size = Vector2(146, 210)
 
-[sub_resource type="BoxMesh" id="BoxMesh_yiag5"]
-material = SubResource("StandardMaterial3D_yiag5")
-size = Vector3(0.75, 1, 0.01)
+[node name="Card" type="CenterContainer" unique_id=1812739938]
+custom_minimum_size = Vector2(150, 214)
+offset_top = 1.0
+offset_right = 150.0
+offset_bottom = 215.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tgmmg"]
-size = Vector3(0.75, 1, 0.02)
-
-[node name="Card" type="Area3D" unique_id=1727368519]
+[node name="Area2D" type="Area2D" parent="." unique_id=163062037]
+position = Vector2(75, 106)
 script = ExtResource("1_yiag5")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=409752649]
-cast_shadow = 0
-mesh = SubResource("BoxMesh_yiag5")
+[node name="MeshInstance3D" type="Sprite2D" parent="Area2D" unique_id=1394288666]
+texture = ExtResource("2_tgmmg")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=727743968]
-shape = SubResource("BoxShape3D_tgmmg")
+[node name="CollisionShape3D" type="CollisionShape2D" parent="Area2D" unique_id=1255128813]
+position = Vector2(-1.9073486e-06, 0)
+shape = SubResource("RectangleShape2D_4dx8l")
 
-[connection signal="mouse_entered" from="." to="." method="_on_area_3d_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_area_3d_mouse_exited"]
+[connection signal="mouse_entered" from="Area2D" to="Area2D" method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="Area2D" method="_on_area_3d_mouse_exited"]
