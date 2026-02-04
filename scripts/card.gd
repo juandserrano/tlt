@@ -25,6 +25,7 @@ var velocity: Vector2
 const selected_card_offset: Vector2 = Vector2(0, -20)
 
 @onready var card_texture: TextureRect = $Texture
+@onready var card_manager: Node = get_node("/root/Game/CardManager")
 # @onready var shadow = $Shadow
 # @onready var collision_shape = $DestroyArea/CollisionShape2D
 
@@ -84,21 +85,27 @@ func destroy() -> void:
 # 	var mouse_pos: Vector2 = get_global_mouse_position()
 # 	global_position = mouse_pos - (size / 2.0)
 
-func toggle_card_selection():
-	is_selected = !is_selected
+func select_card() -> void:
 	if is_selected:
-		position = position + selected_card_offset
-		card_texture.material.set_shader_parameter("show_glow", true)
-	else:
-		position = position - selected_card_offset
-		card_texture.material.set_shader_parameter("show_glow", false)
+		return
+	is_selected = true
+	position = position + selected_card_offset
+	card_texture.material.set_shader_parameter("show_glow", true)
+
+func deselect_card() -> void:
+	if not is_selected:
+		return
+	is_selected = false
+	position = position - selected_card_offset
+	card_texture.material.set_shader_parameter("show_glow", false)
 
 func handle_mouse_click(event: InputEvent) -> void:
 	if not event is InputEventMouseButton: return
 	if event.button_index != MOUSE_BUTTON_LEFT: return
 	
 	if event.is_pressed():
-		toggle_card_selection()
+		# Notify CardManager to handle selection (ensures only one card selected)
+		card_manager.select_card(self)
 
 func _gui_input(event: InputEvent) -> void:
 	handle_mouse_click(event)
