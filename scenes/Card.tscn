@@ -1,22 +1,27 @@
 [gd_scene format=3 uid="uid://bbcqlh8frux75"]
 
-[ext_resource type="Shader" uid="uid://ygxr20dcx8c" path="res://resources/shaders/tilt.gdshader" id="1_4dx8l"]
 [ext_resource type="Script" uid="uid://b61lo8dsnnu64" path="res://scripts/card.gd" id="1_yiag5"]
 [ext_resource type="Texture2D" uid="uid://bgwl8j17ep2rp" path="res://resources/textures/cards/attack_pawn.png" id="2_tgmmg"]
+[ext_resource type="Shader" uid="uid://n6pxdpw57raf" path="res://resources/shaders/card_glow.gdshader" id="3_4dx8l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4dx8l"]
-shader = ExtResource("1_4dx8l")
+shader = ExtResource("3_4dx8l")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
+shader_parameter/show_glow = false
+shader_parameter/glow_color = Color(0, 0, 1.598561, 1)
+shader_parameter/glow_size = 0.0170000008075
+shader_parameter/glow_intensity = 2.0
 
 [node name="Card" type="Button" unique_id=711558565]
 custom_minimum_size = Vector2(150, 214)
 offset_top = 1.0
 offset_right = 150.0
 offset_bottom = 215.0
+pivot_offset = Vector2(75, 107)
 action_mode = 0
 flat = true
 script = ExtResource("1_yiag5")
@@ -42,7 +47,6 @@ material = SubResource("ShaderMaterial_4dx8l")
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 214.0
-pivot_offset = Vector2(75, 107)
 texture = ExtResource("2_tgmmg")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

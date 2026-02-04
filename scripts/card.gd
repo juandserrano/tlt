@@ -71,13 +71,13 @@ func destroy() -> void:
 	
 # 	rotation = displacement
 
-func handle_shadow(delta: float) -> void:
-	# Y position is enver changed.
-	# Only x changes depending on how far we are from the center of the screen
-	var center: Vector2 = get_viewport_rect().size / 2.0
-	var distance: float = global_position.x - center.x
+# func handle_shadow(delta: float) -> void:
+# 	# Y position is enver changed.
+# 	# Only x changes depending on how far we are from the center of the screen
+# 	var center: Vector2 = get_viewport_rect().size / 2.0
+# 	var distance: float = global_position.x - center.x
 	
-	# shadow.position.x = lerp(0.0, -sign(distance) * max_offset_shadow, abs(distance/(center.x)))
+# 	# shadow.position.x = lerp(0.0, -sign(distance) * max_offset_shadow, abs(distance/(center.x)))
 
 # func follow_mouse(delta: float) -> void:
 # 	if not following_mouse: return
@@ -88,8 +88,10 @@ func toggle_card_selection():
 	is_selected = !is_selected
 	if is_selected:
 		position = position + selected_card_offset
+		card_texture.material.set_shader_parameter("show_glow", true)
 	else:
 		position = position - selected_card_offset
+		card_texture.material.set_shader_parameter("show_glow", false)
 
 func handle_mouse_click(event: InputEvent) -> void:
 	if not event is InputEventMouseButton: return
@@ -108,7 +110,7 @@ func _gui_input(event: InputEvent) -> void:
 	var mouse_pos: Vector2 = get_local_mouse_position()
 	#print("Mouse: ", mouse_pos)
 	#print("Card: ", position + size)
-	var diff: Vector2 = (position + size) - mouse_pos
+	# var diff: Vector2 = (position + size) - mouse_pos
 
 	var lerp_val_x: float = remap(mouse_pos.x, 0.0, size.x, 0, 1)
 	var lerp_val_y: float = remap(mouse_pos.y, 0.0, size.y, 0, 1)
