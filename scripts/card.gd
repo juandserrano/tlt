@@ -15,6 +15,8 @@ class_name Card extends Button
 var tween_rot: Tween
 var tween_hover: Tween
 var tween_destroy: Tween
+var tween_float: Tween # For play selection animation
+var tween_shake: Tween # For discard selection animation
 # var tween_handle: Tween
 
 var last_mouse_pos: Vector2
@@ -98,6 +100,9 @@ func select_for_discard() -> void:
 	position = base_position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
 	card_texture.material.set_shader_parameter("is_discard_glow", true)
+	
+	# Start subtle shake animation
+	start_shake_animation()
 
 func select_for_play() -> void:
 	if is_selected or is_selected_for_discard:
@@ -105,12 +110,19 @@ func select_for_play() -> void:
 	is_selected = true
 	position = base_position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
+	
+	# Start slow float animation
+	start_float_animation()
 
 func deselect() -> void:
 	if not is_selected and not is_selected_for_discard:
 		return
 	is_selected = false
 	is_selected_for_discard = false
+	
+	# Stop animations
+	stop_animations()
+	
 	position = base_position
 	card_texture.material.set_shader_parameter("show_glow", false)
 	card_texture.material.set_shader_parameter("is_discard_glow", false)
@@ -120,9 +132,45 @@ func deselect_for_discard() -> void:
 		return
 	is_selected = false
 	is_selected_for_discard = false
+	
+	# Stop animations
+	stop_animations()
+	
 	position = base_position
 	card_texture.material.set_shader_parameter("show_glow", false)
 	card_texture.material.set_shader_parameter("is_discard_glow", false)
+
+# Start slow up/down float animation for play selection
+func start_float_animation() -> void:
+	if tween_float and tween_float.is_running():
+		tween_float.kill()
+	
+	var float_offset = 5.0 # Pixels to float up and down
+	var float_duration = 1.5 # Seconds for one complete cycle
+	
+	tween_float = create_tween().set_loops().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	tween_float.tween_property(self, "position:y", base_position.y + selected_card_offset.y - float_offset, float_duration / 2.0)
+	tween_float.tween_property(self, "position:y", base_position.y + selected_card_offset.y + float_offset, float_duration / 2.0)
+
+# Start subtle shake animation for discard selection
+func start_shake_animation() -> void:
+	if tween_shake and tween_shake.is_running():
+		tween_shake.kill()
+	
+	var shake_amount = 1.0 # Pixels to shake left and right
+	var shake_duration = 0.05 # Seconds for one shake
+	
+	tween_shake = create_tween().set_loops().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	tween_shake.tween_property(self, "position:x", base_position.x + shake_amount, shake_duration)
+	tween_shake.tween_property(self, "position:x", base_position.x - shake_amount, shake_duration)
+	tween_shake.tween_property(self, "position:x", base_position.x, shake_duration)
+
+# Stop all selection animations
+func stop_animations() -> void:
+	if tween_float and tween_float.is_running():
+		tween_float.kill()
+	if tween_shake and tween_shake.is_running():
+		tween_shake.kill()
 
 func handle_left_mouse_click(event: InputEvent) -> void:
 	if not event is InputEventMouseButton: return
