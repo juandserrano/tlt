@@ -7,6 +7,7 @@ const SPAWN_HEIGHT: int = 10
 
 # Tile-based position tracking
 var current_tile: Vector2i # Stores the axial coordinates (q, r)
+var enemy_class: EnemyManager.EnemyClass
 
 # Click detection
 var is_mouse_over: bool = false
@@ -71,9 +72,11 @@ func shrink_and_free_enemy():
 
 func _on_area_3d_mouse_entered() -> void:
 	is_mouse_over = true
+	Signals.mouse_hover_enemy.emit(self)
 
 func _on_area_3d_mouse_exited() -> void:
 	is_mouse_over = false
+	Signals.mouse_unhover_enemy.emit(self)
 
 func melee_attack_player():
 	var starting_pos = position
@@ -84,3 +87,6 @@ func melee_attack_player():
 	tween.tween_property(self, "position", target_pos, 0.1)
 	Signals.enemy_attacked_player.emit(self, target_pos, 1)
 	tween.tween_property(self, "position", starting_pos, 0.1)
+
+func take_damage(amount: int):
+	shrink_and_free_enemy()

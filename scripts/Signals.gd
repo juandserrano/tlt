@@ -7,6 +7,9 @@ extends Node
 # ENEMY SIGNALS
 # ============================================================================
 
+signal mouse_hover_enemy(enemy: Enemy)
+signal mouse_unhover_enemy(enemy: Enemy)
+
 # Emitted when an enemy spawns at a specific tile
 signal enemy_spawned(enemy: Enemy, q: int, r: int)
 

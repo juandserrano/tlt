@@ -5,11 +5,14 @@ class_name EnemyManager extends Node
 
 var enemies_in_play: Array[Enemy]
 var enemy_bag: Array[Enemy]
+static var hovered_enemy: Enemy
 var enemies_container: Node3D # Container to hold all enemy scene instances
 var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
 var pawn_mesh = preload("res://resources/models/enemies/pawn_mesh.tres")
 var knight_mesh = preload("res://resources/models/enemies/knight_mesh.tres")
 var bishop_mesh = preload("res://resources/models/enemies/bishop_mesh.tres")
+var queen_mesh = preload("res://resources/models/enemies/queen_mesh.tres")
+var king_mesh = preload("res://resources/models/enemies/king_mesh.tres")
 
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
@@ -29,6 +32,12 @@ enum EnemyVariant {
 	Enraged,
 	Armored
 }
+
+func _on_mouse_hover_enemy(enemy: Enemy):
+	hovered_enemy = enemy
+
+func _on_mouse_unhover_enemy(_enemy: Enemy):
+	hovered_enemy = null
 
 func _on_enemy_died(enemy: Enemy):
 	# Remove from EnemyManager's tracking array
@@ -53,16 +62,21 @@ func _on_enemy_hit_ground():
 
 func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 	var enemy = enemy_scene.instantiate() as Enemy
+	enemy.enemy_class = enemy_class
 	var mesh_instance = enemy.get_node("MeshInstance3D") as MeshInstance3D
-	match enemy_class:
+	match enemy.enemy_class:
 		EnemyClass.Pawn:
 			mesh_instance.mesh = pawn_mesh
 		EnemyClass.Knight:
 			mesh_instance.mesh = knight_mesh
 		EnemyClass.Bishop:
 			mesh_instance.mesh = bishop_mesh
+		EnemyClass.Queen:
+			mesh_instance.mesh = queen_mesh
+		EnemyClass.King:
+			mesh_instance.mesh = king_mesh
 		_:
-			mesh_instance.mesh = pawn_mesh
+			return
 	
 	enemies_container.add_child(enemy)
 	enemies_in_play.append(enemy)
@@ -74,6 +88,8 @@ func _ready() -> void:
 	#Subscribe to signals
 	Signals.enemy_died.connect(_on_enemy_died)
 	Signals.enemy_hit_ground.connect(_on_enemy_hit_ground)
+	Signals.mouse_hover_enemy.connect(_on_mouse_hover_enemy)
+	Signals.mouse_unhover_enemy.connect(_on_mouse_unhover_enemy)
 
 	# Create and add the container for enemy instances
 	enemies_container = Node3D.new()

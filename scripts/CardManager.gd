@@ -1,4 +1,17 @@
-extends Node
+class_name CardManager extends Node
+
+enum CardType {
+	Pawn,
+	Knight,
+	Bishop,
+	King,
+	Queen,
+	Halo,
+	Moat,
+	Cannonball,
+	Landmines,
+	Fog
+}
 
 var card_scene: PackedScene = preload("res://scenes/Card.tscn")
 
