@@ -59,6 +59,21 @@ func _process(_delta: float) -> void:
 	if currently_selected_card != null && EnemyManager.hovered_enemy != null:
 		if Input.is_action_just_pressed("spawn_enemy"):
 			currently_selected_card.attack_enemy(EnemyManager.hovered_enemy)
+	if Input.is_action_just_pressed("Draw"):
+		draw_cards_to_available_slots()
+
+func draw_cards_to_available_slots():
+	while true:
+		var slot = get_next_available_slot()
+		print(slot)
+		if slot < 0: return
+		draw_card_to_slot(slot)
+
+func draw_card_to_slot(slot: int):
+	var card: Card = card_scene.instantiate()
+	card_container.add_child(card)
+	add_card_to_grid(card, slot)
+
 
 # Initialize grid slots
 func initialize_grid() -> void:

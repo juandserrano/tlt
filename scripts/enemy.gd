@@ -1,9 +1,13 @@
 class_name Enemy
 extends Node3D
 
+var max_health: int = 1
+var current_health: int
+
 const SPAWN_HEIGHT: int = 10
 
 @onready var grid: HexGrid = $"/root/Game/World/HexGrid"
+@onready var particle_manager: ParticleManager = $"/root/Game/ParticleManager"
 
 # Tile-based position tracking
 var current_tile: Vector2i # Stores the axial coordinates (q, r)
@@ -17,6 +21,7 @@ var has_hit_ground: bool = false # Track if enemy has landed
 func _ready() -> void:
 	# Set up input handling
 	set_process_input(true)
+	current_health = max_health
 
 func move_to_tile(q: int, r: int):
 	# Update tile position
@@ -58,16 +63,13 @@ func fall_after_spawn():
 			Signals.enemy_hit_ground.emit()
 	)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if is_mouse_over:
-				Signals.enemy_died.emit(self)
-
 func shrink_and_free_enemy():
 	# Shrink and delete
 	var tween = create_tween()
 	tween.tween_property(self, "scale", Vector3(0.001, 0.001, 0.001), 0.2)
+	tween.tween_callback(func():
+		particle_manager.spawn_explosion(position)
+		)
 	tween.tween_callback(queue_free)
 
 func _on_area_3d_mouse_entered() -> void:
@@ -89,4 +91,7 @@ func melee_attack_player():
 	tween.tween_property(self, "position", starting_pos, 0.1)
 
 func take_damage(amount: int):
-	shrink_and_free_enemy()
+	current_health -= amount
+	if current_health <= 0:
+		current_health = 0
+		Signals.enemy_died.emit(self)
