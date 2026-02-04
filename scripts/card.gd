@@ -202,7 +202,3 @@ func attack_enemy(enemy: Enemy):
 		_:
 			return
 
-func _process(delta: float) -> void:
-	if is_selected && EnemyManager.hovered_enemy != null:
-		if Input.is_action_just_pressed("spawn_enemy"):
-			attack_enemy(EnemyManager.hovered_enemy)

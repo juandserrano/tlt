@@ -15,11 +15,17 @@ enum CardType {
 
 var card_scene: PackedScene = preload("res://scenes/Card.tscn")
 
-var cards_in_hand: Array[Card]
-var currently_selected_card: Card = null
+#########################################
+########    DRAW DECK    ################
+#########################################
+
+#########################################
+########    PLAYER HAND  ################
+#########################################
+var player_hand: Array[Card]
 var cards_for_discard: Array[Card]
 var max_discards: int = 2
-var discard_pile: Array[Card]
+var currently_selected_card: Card = null
 
 # Grid positioning system
 var card_container: Control = null
@@ -28,6 +34,10 @@ var card_spacing: Vector2 = Vector2(5, 0) # Horizontal spacing between cards
 var grid_start_position: Vector2 = Vector2(0, 0) # Will be calculated based on container
 var card_grid_slots: Array[Dictionary] = [] # {position: Vector2, card: Card, occupied: bool}
 
+#########################################
+########   DISCARD PILE  ################
+#########################################
+var discard_pile: Array[Card]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,6 +56,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Execute Discard"):
 		discard_cards()
+	if currently_selected_card != null && EnemyManager.hovered_enemy != null:
+		if Input.is_action_just_pressed("spawn_enemy"):
+			currently_selected_card.attack_enemy(EnemyManager.hovered_enemy)
 
 # Initialize grid slots
 func initialize_grid() -> void:
@@ -100,8 +113,8 @@ func add_card_to_grid(card: Card, slot_index: int = -1) -> void:
 	card_grid_slots[slot_index]["occupied"] = true
 	
 	# Add to cards in hand if not already there
-	if not cards_in_hand.has(card):
-		cards_in_hand.append(card)
+	if not player_hand.has(card):
+		player_hand.append(card)
 
 # Remove a card from the grid (keeps slot empty)
 func remove_card_from_grid(card: Card) -> void:
@@ -110,11 +123,11 @@ func remove_card_from_grid(card: Card) -> void:
 		card_grid_slots[slot_index]["card"] = null
 		card_grid_slots[slot_index]["occupied"] = false
 	
-	cards_in_hand.erase(card)
+	player_hand.erase(card)
 
 # Position all cards in hand to their assigned grid slots
 func position_cards() -> void:
-	for card in cards_in_hand:
+	for card in player_hand:
 		if card.grid_slot_index >= 0 and card.grid_slot_index < card_grid_slots.size():
 			card.position = card.base_position
 
