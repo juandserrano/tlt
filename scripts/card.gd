@@ -20,6 +20,7 @@ var tween_destroy: Tween
 var last_mouse_pos: Vector2
 var mouse_velocity: Vector2
 var is_selected: bool = false
+var is_selected_for_discard: bool = false
 var last_pos: Vector2
 var velocity: Vector2
 const selected_card_offset: Vector2 = Vector2(0, -20)
@@ -46,12 +47,13 @@ func _process(delta: float) -> void:
 	pass
 	
 func destroy() -> void:
+	print("destroying")
 	card_texture.use_parent_material = true
 	if tween_destroy and tween_destroy.is_running():
 		tween_destroy.kill()
 	tween_destroy = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	tween_destroy.tween_property(material, "shader_parameter/dissolve_value", 0.0, 2.0).from(1.0)
-	# tween_destroy.parallel().tween_property(shadow, "self_modulate:a", 0.0, 1.0)
+	tween_destroy.tween_property(material, "shader_parameter/dissolve_value", 0.0, 1.0).from(1.0)
+	tween_destroy.finished.connect(queue_free)
 
 # func rotate_velocity(delta: float) -> void:
 # 	if not following_mouse: return
@@ -85,30 +87,58 @@ func destroy() -> void:
 # 	var mouse_pos: Vector2 = get_global_mouse_position()
 # 	global_position = mouse_pos - (size / 2.0)
 
-func select_card() -> void:
-	if is_selected:
+func select_for_discard() -> void:
+	if is_selected or is_selected_for_discard:
+		return
+	is_selected_for_discard = true
+	position = position + selected_card_offset
+	card_texture.material.set_shader_parameter("show_glow", true)
+	card_texture.material.set_shader_parameter("is_discard_glow", true)
+
+func select_for_play() -> void:
+	if is_selected or is_selected_for_discard:
 		return
 	is_selected = true
 	position = position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
 
-func deselect_card() -> void:
-	if not is_selected:
+func deselect() -> void:
+	if not is_selected and not is_selected_for_discard:
 		return
 	is_selected = false
+	is_selected_for_discard = false
 	position = position - selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", false)
+	card_texture.material.set_shader_parameter("is_discard_glow", false)
 
-func handle_mouse_click(event: InputEvent) -> void:
+func deselect_for_discard() -> void:
+	if not is_selected_for_discard:
+		return
+	is_selected = false
+	is_selected_for_discard = false
+	position = position - selected_card_offset
+	card_texture.material.set_shader_parameter("show_glow", false)
+	card_texture.material.set_shader_parameter("is_discard_glow", false)
+
+func handle_left_mouse_click(event: InputEvent) -> void:
 	if not event is InputEventMouseButton: return
 	if event.button_index != MOUSE_BUTTON_LEFT: return
 	
 	if event.is_pressed():
 		# Notify CardManager to handle selection (ensures only one card selected)
-		card_manager.select_card(self)
+		card_manager.select_card_for_play(self)
+
+func handle_right_mouse_click(event: InputEvent) -> void:
+	if not event is InputEventMouseButton: return
+	if event.button_index != MOUSE_BUTTON_RIGHT: return
+	
+	if event.is_pressed():
+		# Notify CardManager to handle selection (ensures only one card selected)
+		card_manager.select_card_for_discard(self)
 
 func _gui_input(event: InputEvent) -> void:
-	handle_mouse_click(event)
+	handle_left_mouse_click(event)
+	handle_right_mouse_click(event)
 	
 	if not event is InputEventMouseMotion: return
 	

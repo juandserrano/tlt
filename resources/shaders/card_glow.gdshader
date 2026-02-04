@@ -16,7 +16,9 @@ uniform float inset : hint_range(0, 1) = 0.0;
 
 // Glow parameters
 uniform bool show_glow = false;
-uniform vec4 glow_color : source_color = vec4(1.0, 0.8, 0.2, 1.0);
+uniform bool is_discard_glow = false;
+uniform vec4 glow_color : source_color = vec4(0, 0, 1, 1.0);
+uniform vec4 discard_glow_color : source_color = vec4(1, 0, 0, 1.0);
 uniform float glow_size : hint_range(0.0, 0.1) = 0.02;
 uniform float glow_intensity : hint_range(0.0, 2.0) = 1.0;
 
@@ -91,10 +93,14 @@ void fragment(){
 		float card_bloom = glow * tex_color.a * 0.3 * glow_intensity;
 		
 		// Blend with a softer, more radiant approach
-		vec3 bloom_color = glow_color.rgb * edge_glow;
+		vec4 glow_c = glow_color;
+		if (is_discard_glow) {
+			glow_c = discard_glow_color;
+		}
+		vec3 bloom_color = glow_c.rgb * edge_glow;
 		COLOR.rgb = mix(bloom_color, tex_color.rgb + bloom_color * 0.5, tex_color.a);
-		COLOR.rgb += glow_color.rgb * card_bloom; // Add radiance to the card
-		COLOR.a = max(tex_color.a, edge_glow * glow_color.a * 0.8);
+		COLOR.rgb += glow_c.rgb * card_bloom; // Add radiance to the card
+		COLOR.a = max(tex_color.a, edge_glow * glow_c.a * 0.8);
 	} else {
 		COLOR = tex_color;
 	}
