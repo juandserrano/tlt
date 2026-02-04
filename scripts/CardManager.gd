@@ -6,6 +6,7 @@ var cards_in_hand: Array[Card]
 var currently_selected_card: Card = null
 var cards_for_discard: Array[Card]
 var max_discards: int = 2
+var discard_pile: Array[Card]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -21,8 +22,8 @@ func _process(_delta: float) -> void:
 func discard_cards():
 	print(cards_for_discard)
 	for i in range(len(cards_for_discard) - 1, -1, -1):
+		discard_pile.append(cards_for_discard[i])
 		cards_for_discard[i].destroy()
-		print(cards_for_discard[i])
 		cards_for_discard.remove_at(i)
 
 # Handle card selection - ensures only one card is selected at a time
