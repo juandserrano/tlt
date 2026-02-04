@@ -67,12 +67,19 @@ func draw_cards_to_available_slots():
 		var slot = get_next_available_slot()
 		print(slot)
 		if slot < 0: return
-		draw_card_to_slot(slot)
+		await draw_card_to_slot(slot)
 
 func draw_card_to_slot(slot: int):
 	var card: Card = card_scene.instantiate()
 	card_container.add_child(card)
 	add_card_to_grid(card, slot)
+	
+	# Start card off-screen to the left and slightly up
+	var start_offset = Vector2(-800, -100)
+	card.position = card.base_position + start_offset
+	
+	# Animate card into position and wait for it to complete
+	await card.animate_draw_to_position()
 
 
 # Initialize grid slots
@@ -139,6 +146,11 @@ func remove_card_from_grid(card: Card) -> void:
 		card_grid_slots[slot_index]["occupied"] = false
 	
 	player_hand.erase(card)
+
+func destroy_card_after_use(card):
+	remove_card_from_grid(card)
+	currently_selected_card = null
+	card.destroy()
 
 # Position all cards in hand to their assigned grid slots
 func position_cards() -> void:

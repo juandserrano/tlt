@@ -9,6 +9,7 @@ var tween_hover: Tween
 var tween_destroy: Tween
 var tween_float: Tween # For play selection animation
 var tween_shake: Tween # For discard selection animation
+var tween_draw: Tween # For draw animation
 
 var last_mouse_pos: Vector2
 var mouse_velocity: Vector2
@@ -127,6 +128,17 @@ func stop_animations() -> void:
 	if tween_shake and tween_shake.is_running():
 		tween_shake.kill()
 
+# Animate card from off-screen to its base position
+func animate_draw_to_position():
+	if tween_draw and tween_draw.is_running():
+		tween_draw.kill()
+	
+	tween_draw = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween_draw.tween_property(self, "position", base_position, 0.1)
+	
+	# Return the tween's finished signal so caller can await it
+	await tween_draw.finished
+
 func handle_left_mouse_click(event: InputEvent) -> void:
 	if not event is InputEventMouseButton: return
 	if event.button_index != MOUSE_BUTTON_LEFT: return
@@ -201,4 +213,5 @@ func attack_enemy(enemy: Enemy):
 				print("attack king")
 		_:
 			return
-
+	
+	card_manager.destroy_card_after_use(self)
