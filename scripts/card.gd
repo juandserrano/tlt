@@ -25,6 +25,10 @@ var last_pos: Vector2
 var velocity: Vector2
 const selected_card_offset: Vector2 = Vector2(0, -20)
 
+# Grid positioning
+var base_position: Vector2 = Vector2.ZERO # Assigned grid position
+var grid_slot_index: int = -1 # Which grid slot this card occupies
+
 @onready var card_texture: TextureRect = $Texture
 @onready var card_manager: Node = get_node("/root/Game/CardManager")
 # @onready var shadow = $Shadow
@@ -91,7 +95,7 @@ func select_for_discard() -> void:
 	if is_selected or is_selected_for_discard:
 		return
 	is_selected_for_discard = true
-	position = position + selected_card_offset
+	position = base_position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
 	card_texture.material.set_shader_parameter("is_discard_glow", true)
 
@@ -99,7 +103,7 @@ func select_for_play() -> void:
 	if is_selected or is_selected_for_discard:
 		return
 	is_selected = true
-	position = position + selected_card_offset
+	position = base_position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
 
 func deselect() -> void:
@@ -107,7 +111,7 @@ func deselect() -> void:
 		return
 	is_selected = false
 	is_selected_for_discard = false
-	position = position - selected_card_offset
+	position = base_position
 	card_texture.material.set_shader_parameter("show_glow", false)
 	card_texture.material.set_shader_parameter("is_discard_glow", false)
 
@@ -116,7 +120,7 @@ func deselect_for_discard() -> void:
 		return
 	is_selected = false
 	is_selected_for_discard = false
-	position = position - selected_card_offset
+	position = base_position
 	card_texture.material.set_shader_parameter("show_glow", false)
 	card_texture.material.set_shader_parameter("is_discard_glow", false)
 
