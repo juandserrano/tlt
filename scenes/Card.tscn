@@ -1,27 +1,49 @@
 [gd_scene format=3 uid="uid://bbcqlh8frux75"]
 
+[ext_resource type="Shader" uid="uid://ygxr20dcx8c" path="res://resources/shaders/tilt.gdshader" id="1_4dx8l"]
 [ext_resource type="Script" uid="uid://b61lo8dsnnu64" path="res://scripts/card.gd" id="1_yiag5"]
 [ext_resource type="Texture2D" uid="uid://bgwl8j17ep2rp" path="res://resources/textures/cards/attack_pawn.png" id="2_tgmmg"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4dx8l"]
-size = Vector2(146, 210)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4dx8l"]
+shader = ExtResource("1_4dx8l")
+shader_parameter/fov = 90.0
+shader_parameter/cull_back = true
+shader_parameter/y_rot = 0.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
 
-[node name="Card" type="CenterContainer" unique_id=1812739938]
+[node name="Card" type="Button" unique_id=711558565]
 custom_minimum_size = Vector2(150, 214)
 offset_top = 1.0
 offset_right = 150.0
 offset_bottom = 215.0
-
-[node name="Area2D" type="Area2D" parent="." unique_id=163062037]
-position = Vector2(75, 106)
+action_mode = 0
+flat = true
 script = ExtResource("1_yiag5")
+angle_x_max = 2.0
+angle_y_max = 0.2
 
-[node name="MeshInstance3D" type="Sprite2D" parent="Area2D" unique_id=1394288666]
+[node name="Shadow" type="TextureRect" parent="." unique_id=1825929203]
+visible = false
+modulate = Color(0, 0, 0, 0.24705882)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 15.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_tgmmg")
+expand_mode = 1
+
+[node name="Texture" type="TextureRect" parent="." unique_id=495138800]
+material = SubResource("ShaderMaterial_4dx8l")
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 214.0
+pivot_offset = Vector2(75, 107)
 texture = ExtResource("2_tgmmg")
 
-[node name="CollisionShape3D" type="CollisionShape2D" parent="Area2D" unique_id=1255128813]
-position = Vector2(-1.9073486e-06, 0)
-shape = SubResource("RectangleShape2D_4dx8l")
-
-[connection signal="mouse_entered" from="Area2D" to="Area2D" method="_on_area_3d_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="Area2D" method="_on_area_3d_mouse_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
