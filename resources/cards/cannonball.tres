@@ -8,4 +8,5 @@ script = ExtResource("1_w4n0w")
 card_type = 7
 texture = ExtResource("2_w4n0w")
 melee_damage = 1
+is_special = true
 metadata/_custom_type_script = "uid://rhf81l75dhsp"

@@ -3,6 +3,7 @@ class_name CardResource extends Resource
 @export var card_type: CardManager.CardType
 @export var texture: Texture2D
 @export var melee_damage: int
+@export var is_special: bool = false
 @export var is_autoplay: bool = false
 
 func halo():

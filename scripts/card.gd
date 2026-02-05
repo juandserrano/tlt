@@ -31,6 +31,7 @@ var grid_slot_index: int = -1 # Which grid slot this card occupies
 
 @onready var card_texture: TextureRect = $Texture
 @onready var card_manager: CardManager = get_node("/root/Game/CardManager")
+@onready var special_attack_button: Button = $SpecialAttackButton
 
 func _ready() -> void:
 	card_type = card_resource.card_type
@@ -71,6 +72,10 @@ func select_for_play() -> void:
 	position = base_position + selected_card_offset
 	card_texture.material.set_shader_parameter("show_glow", true)
 	
+	# Show special attack button if this is a special card
+	if card_resource.is_special:
+		special_attack_button.visible = true
+	
 	# Start slow float animation
 	start_float_animation()
 
@@ -82,6 +87,9 @@ func deselect() -> void:
 	
 	# Stop animations
 	stop_animations()
+	
+	# Hide special attack button
+	special_attack_button.visible = false
 	
 	position = base_position
 	card_texture.material.set_shader_parameter("show_glow", false)
@@ -191,14 +199,18 @@ func _on_mouse_exited() -> void:
 	tween_rot.tween_property(card_texture.material, "shader_parameter/x_rot", 0.0, 0.5)
 	tween_rot.tween_property(card_texture.material, "shader_parameter/y_rot", 0.0, 0.5)
 	
-	# Reset scale
-	if tween_hover and tween_hover.is_running():
-		tween_hover.kill()
-	tween_hover = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
-	tween_hover.tween_property(self, "scale", Vector2.ONE, 0.55)
+	# Reset scale only if card is not selected
+	if not is_selected and not is_selected_for_discard:
+		if tween_hover and tween_hover.is_running():
+			tween_hover.kill()
+		tween_hover = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+		tween_hover.tween_property(self, "scale", Vector2.ONE, 0.55)
 
 func do_special_attack():
 	card_resource.do_special_attack()
+
+func _on_special_attack_button_pressed():
+	do_special_attack()
 
 func attack_enemy(enemy: Enemy):
 	match card_type:

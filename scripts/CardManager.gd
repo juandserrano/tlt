@@ -66,8 +66,6 @@ func _process(_delta: float) -> void:
 			var target_enemy = get_enemy_under_mouse()
 			if target_enemy != null:
 				currently_selected_card.attack_enemy(target_enemy)
-			else:
-				currently_selected_card.do_special_attack()
 
 	if Input.is_action_just_pressed("Draw"):
 		draw_cards_to_available_slots()
