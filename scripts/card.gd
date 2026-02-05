@@ -74,7 +74,7 @@ func select_for_play() -> void:
 	card_texture.material.set_shader_parameter("show_glow", true)
 	
 	# Show special attack button if this is a special card
-	if card_resource.is_special:
+	if card_resource.is_special and card_type != CardManager.CardType.Cannonball:
 		special_attack_button.visible = true
 	
 	# Start slow float animation

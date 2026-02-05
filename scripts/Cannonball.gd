@@ -26,6 +26,10 @@ func _process(delta: float) -> void:
 	global_position += direction * speed * delta
 
 func _explode_and_damage():
+	var particle_manager = get_node("/root/Game/ParticleManager")
+	if particle_manager:
+		particle_manager.spawn_explosion(final_target_pos)
+
 	# Direct hit (backup)
 	if is_instance_valid(target) and target.has_method("take_damage"):
 		target.take_damage(damage)

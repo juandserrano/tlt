@@ -62,17 +62,22 @@ func _ready() -> void:
 		draw_cards_to_available_slots()
 
 var targeting_mode_card: Card = null
+var targeting_input_cooldown: int = 0
 
 func start_special_targeting(card: Card):
 	targeting_mode_card = card
+	targeting_input_cooldown = 10 # Prevent immediate firing from the same click
 	# Could add visual cursor change here
 
 func _process(delta: float) -> void:
+	if targeting_input_cooldown > 0:
+		targeting_input_cooldown -= 1
+
 	if Input.is_action_just_pressed("Execute Discard"):
 		discard_cards()
 		
 	if targeting_mode_card != null:
-		if Input.is_action_just_pressed("spawn_enemy"): # Left click
+		if Input.is_action_just_pressed("spawn_enemy") and targeting_input_cooldown == 0: # Left click
 			var ground_click_pos = get_ground_position_under_mouse()
 			if ground_click_pos != null:
 				targeting_mode_card.finish_special_attack(ground_click_pos)
@@ -299,6 +304,9 @@ func select_card_for_play(card: Card) -> void:
 	# Select the new card
 	card.select_for_play()
 	currently_selected_card = card
+	
+	if card.card_type == CardType.Cannonball:
+		start_special_targeting(card)
 
 func select_card_for_discard(card: Card) -> void:
 	if card.card_resource.is_autoplay: return
