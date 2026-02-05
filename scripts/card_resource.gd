@@ -6,8 +6,29 @@ class_name CardResource extends Resource
 @export var is_special: bool = false
 @export var is_autoplay: bool = false
 
+const HALO_SCENE = preload("res://scenes/Halo.tscn")
+
 func halo():
-		print("haloooo")
+	print("haloooo")
+	var tree = Signals.get_tree()
+	if not tree: return
+	
+	var root = tree.root
+	var player_tower = root.get_node_or_null("Game/PlayerTower")
+	var world = root.get_node_or_null("Game/World")
+	
+	if not player_tower or not world:
+		print("Missing dependencies for halo")
+		return
+		
+	var halo_instance = HALO_SCENE.instantiate()
+	world.add_child(halo_instance)
+	# Position at y = 3.5 (roughly half height of player tower which is usually around y=0 to y=something)
+	# User requested "y = half of player mash height". Assuming 3.5 based on Cannonball offset.
+	halo_instance.global_position = player_tower.global_position + Vector3(0, 1, 0)
+	
+	if "damage" in halo_instance:
+		halo_instance.damage = melee_damage
 
 const CANNONBALL_SCENE = preload("res://scenes/Cannonball.tscn")
 

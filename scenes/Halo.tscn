@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://halo_attack_scene"]
+
+[ext_resource type="Script" path="res://scripts/Halo.gd" id="1_script"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+height = 1.0
+radius = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire"]
+transparency = 1
+albedo_color = Color(1, 0.4, 0, 0.8)
+emission_enabled = true
+emission = Color(1, 0.2, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="TorusMesh" id="TorusMesh_visual"]
+material = SubResource("StandardMaterial3D_fire")
+inner_radius = 0.8
+outer_radius = 1.0
+
+[node name="Halo" type="Area3D"]
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("TorusMesh_visual")
