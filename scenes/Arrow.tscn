@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://c7r8yaw5e4t4"]
+
+[ext_resource type="Script" uid="uid://djkmh0vby3e1b" path="res://scripts/Arrow.gd" id="1_arrow"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arrow"]
+size = Vector3(0.1, 0.1, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
+albedo_color = Color(0.55, 0.27, 0.07, 1)
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="BoxMesh_arrow"]
+material = SubResource("StandardMaterial3D_arrow")
+size = Vector3(0.05, 0.05, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4yf74"]
+albedo_color = Color(0.46034718, 0.46034718, 0.46034712, 1)
+metallic = 0.69
+metallic_specular = 0.56
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4yf74"]
+material = SubResource("StandardMaterial3D_4yf74")
+top_radius = 0.0
+bottom_radius = 0.07
+height = 0.23
+
+[node name="Arrow" type="Area3D" unique_id=217092062]
+script = ExtResource("1_arrow")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1339054506]
+shape = SubResource("BoxShape3D_arrow")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1198714855]
+transform = Transform3D(0.69, 0, 0, 0, 0.69, 0, 0, 0, 0.69, 0, 0, 0)
+mesh = SubResource("BoxMesh_arrow")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1352088991]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.47374493)
+mesh = SubResource("CylinderMesh_4yf74")

@@ -23,7 +23,7 @@ var is_selected_for_discard: bool = false
 var card_type: CardManager.CardType
 const selected_card_offset: Vector2 = Vector2(0, -20)
 var card_damage: int
-const CANNONBALL_SCENE = preload("res://scenes/Cannonball.tscn")
+const ARROW_SCENE = preload("res://scenes/Arrow.tscn")
 #########################################
 
 # Grid positioning
@@ -213,48 +213,48 @@ func do_special_attack():
 func _on_special_attack_button_pressed():
 	do_special_attack()
 
-func spawn_cannonball(target_enemy: Enemy):
-	var cannonball = CANNONBALL_SCENE.instantiate()
+func spawn_arrow(target_enemy: Enemy):
+	var arrow = ARROW_SCENE.instantiate()
 	var player_tower = get_node("/root/Game/PlayerTower")
 	# Add to the world scene FIRST so it is inside the tree
-	get_node("/root/Game/World").add_child(cannonball)
+	get_node("/root/Game/World").add_child(arrow)
 	
 	if player_tower:
 		# Spawn from roughly the top of the tower
-		cannonball.global_position = player_tower.global_position + Vector3(0, 3.5, 0)
+		arrow.global_position = player_tower.global_position + Vector3(0, 3.5, 0)
 	else:
 		# If tower missing, just remove it or set default pos
-		cannonball.queue_free()
+		arrow.queue_free()
 		return
 	
-	cannonball.target = target_enemy
-	cannonball.damage = card_damage
+	arrow.target = target_enemy
+	arrow.damage = card_damage
 
 func attack_enemy(enemy: Enemy):
 	match card_type:
 		CardManager.CardType.Pawn:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Pawn:
-				spawn_cannonball(enemy)
+				spawn_arrow(enemy)
 				card_manager.destroy_card_after_use(self)
 				print("attack pawn")
 		CardManager.CardType.Knight:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Knight:
-				spawn_cannonball(enemy)
+				spawn_arrow(enemy)
 				card_manager.destroy_card_after_use(self)
 				print("attack knight")
 		CardManager.CardType.Bishop:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Bishop:
-				spawn_cannonball(enemy)
+				spawn_arrow(enemy)
 				card_manager.destroy_card_after_use(self)
 				print("attack bishop")
 		CardManager.CardType.Queen:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Queen:
-				spawn_cannonball(enemy)
+				spawn_arrow(enemy)
 				card_manager.destroy_card_after_use(self)
 				print("attack queen")
 		CardManager.CardType.King:
 			if enemy.enemy_class == EnemyManager.EnemyClass.King:
-				spawn_cannonball(enemy)
+				spawn_arrow(enemy)
 				card_manager.destroy_card_after_use(self)
 				print("attack king")
 		_:
