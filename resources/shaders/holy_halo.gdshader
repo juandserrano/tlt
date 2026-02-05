@@ -3,6 +3,11 @@ render_mode blend_add, cull_disabled, unshaded;
 
 uniform vec4 main_color : source_color = vec4(1.0, 0.8, 0.2, 1.0);
 uniform float dissolve : hint_range(0.0, 1.0) = 0.0;
+uniform float radius : hint_range(0.0, 1.0) = 0.5;
+uniform float thickness : hint_range(0.0, 0.5) = 0.02;
+
+uniform float wobble_frequency : hint_range(0.0, 20.0) = 10.0;
+uniform float wobble_amplitude : hint_range(0.0, 0.5) = 0.05;
 
 void fragment() {
 	// 1. Map UV coordinates to [-1, 1] range for SDF calculation
@@ -11,11 +16,11 @@ void fragment() {
 	
 	// 2. Procedural Wobble
 	float angle = atan(uv.y, uv.x);
-	float wobble = sin(angle * 7.0 + TIME * 3.5) * 0.04;
+	float wobble = sin(angle * wobble_frequency + TIME * 3.5) * wobble_amplitude;
 	
 	// 3. SDF Ring Shape
-	float radius = 0.75;
-	float thickness = 0.035;
+	// float radius = 0.75; // Replaced by uniform
+	// float thickness = 0.02; // Replaced by uniform
 	
 	// Distance to the circle boundary (with wobble)
 	float d = abs(dist - (radius + wobble)) - thickness;

@@ -10,23 +10,43 @@ var current_radius: float = 1.0
 
 func _ready():
 	# Connect signal if not already connected via editor
-	body_entered.connect(_on_body_entered)
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
 	
-	# Initial setup
-	scale = Vector3(0.1, 1.0, 0.1)
-	
-	# Create a unique material for fading
+	# Create a unique material for fading and radius control
 	if mesh_instance and mesh_instance.mesh:
 		var mat = mesh_instance.mesh.material
 		if mat:
 			mesh_instance.material_override = mat.duplicate()
-			
+	
+	# Set Mesh to maximum size (so shader can draw up to max_radius)
+	# PlaneMesh size is (2,2) -> radius 1 in model space.
+	# We want model radius to be max_radius.
+	mesh_instance.scale = Vector3(max_radius, 1.0, max_radius)
+	
+	# Initial collision size
+	collision_shape.scale = Vector3(0.1, 1.0, 0.1)
+
 func _process(delta):
 	# Expansion
 	if current_radius < max_radius:
 		current_radius += expansion_speed * delta
-		# Scale the whole Area3D to expand both visual and collider
-		scale = Vector3(current_radius, 1.0, current_radius)
+		
+		# Update Shader Radius (Normalized 0..1 relative to max_radius)
+		# We subtract a bit to keep it inside the mesh bounds
+		var normalized_radius = (current_radius / max_radius) * 0.9
+		var normalized_thickness = 0.5 / max_radius # Constant world thickness ~0.5 units
+		
+		# User wanted edge radius smaller (thinner), so small thickness
+		
+		var mat = mesh_instance.material_override
+		if mat:
+			mat.set_shader_parameter("radius", normalized_radius)
+			mat.set_shader_parameter("thickness", normalized_thickness)
+			
+		# Update Collision (Scale to fit)
+		collision_shape.scale = Vector3(current_radius, 1.0, current_radius)
+		
 	else:
 		# Fade out and destroy
 		_fade_and_destroy(delta)
