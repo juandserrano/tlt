@@ -33,6 +33,7 @@ var grid_columns: int = 5
 var card_spacing: Vector2 = Vector2(5, 0) # Horizontal spacing between cards
 var grid_start_position: Vector2 = Vector2(0, 0) # Will be calculated based on container
 var card_grid_slots: Array[Dictionary] = [] # {position: Vector2, card: Card, occupied: bool}
+var camera: Camera3D = null # Reference to the main camera for raycasting
 
 #########################################
 ########   DISCARD PILE  ################
@@ -43,6 +44,9 @@ var discard_pile: Array[Card]
 func _ready() -> void:
 	# Get reference to the card container
 	card_container = get_node("/root/Game/GameplayUI/GridContainer")
+	
+	# Get reference to the camera for raycasting
+	camera = get_node("/root/Game/Camera3D")
 	
 	# Initialize the grid
 	initialize_grid()
@@ -56,11 +60,49 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Execute Discard"):
 		discard_cards()
-	if currently_selected_card != null && EnemyManager.hovered_enemy != null:
+	if currently_selected_card != null:
 		if Input.is_action_just_pressed("spawn_enemy"):
-			currently_selected_card.attack_enemy(EnemyManager.hovered_enemy)
+			var target_enemy = get_enemy_under_mouse()
+			if target_enemy != null:
+				currently_selected_card.attack_enemy(target_enemy)
 	if Input.is_action_just_pressed("Draw"):
 		draw_cards_to_available_slots()
+
+# Returns only the first (closest) enemy hit, or null if no enemy is hit
+func get_enemy_under_mouse() -> Enemy:
+	if camera == null:
+		return null
+	
+	# Get the mouse position in viewport coordinates
+	var mouse_pos = get_viewport().get_mouse_position()
+	
+	# Create a ray from the camera through the mouse position
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * 1000.0 # Ray length of 1000 units
+	
+	# Set up the raycast query
+	var space_state = camera.get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collide_with_areas = false # Only hit physics bodies
+	query.collide_with_bodies = true
+	
+	# Perform the raycast
+	var result = space_state.intersect_ray(query)
+	
+	# Check if we hit something and if it's an enemy
+	if result.is_empty():
+		return null
+	
+	var collider = result.get("collider")
+	
+	# Check if it's an Enemy or if its parent/ancestor is an Enemy
+	# var current_node = collider
+	# while current_node != null:
+	if collider is Enemy:
+		return collider
+		# current_node = current_node.get_parent()
+	
+	return null
 
 func draw_cards_to_available_slots():
 	while true:

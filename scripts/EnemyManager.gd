@@ -78,6 +78,20 @@ func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 		_:
 			return
 	
+	# Update collision shape to match the mesh dimensions
+	var collision_shape = enemy.get_node("CollisionShape3D") as CollisionShape3D
+	var aabb = mesh_instance.mesh.get_aabb()
+	
+	# Create new box shape matching mesh dimensions
+	var new_shape = BoxShape3D.new()
+	new_shape.size = aabb.size
+	
+	# Update the collision shape
+	collision_shape.shape = new_shape
+	
+	# Center the collision shape on the mesh
+	collision_shape.position = aabb.get_center()
+	
 	enemies_container.add_child(enemy)
 	enemies_in_play.append(enemy)
 	var spawn_pos = get_random_free_hex_at_distance(SPAWN_RADIUS)
