@@ -17,14 +17,9 @@ func _ready():
 	
 	# Create a unique material for fading
 	if mesh_instance and mesh_instance.mesh:
-		# Ensure mesh is unique too to modify radius if needed, 
-		# but scaling Area3D handles resizing.
-		# Just duplicate material for fading
-		var mat = mesh_instance.mesh.surface_get_material(0)
+		var mat = mesh_instance.mesh.material
 		if mat:
 			mesh_instance.material_override = mat.duplicate()
-		elif mesh_instance.mesh.material:
-			mesh_instance.material_override = mesh_instance.mesh.material.duplicate()
 			
 func _process(delta):
 	# Expansion
@@ -49,11 +44,13 @@ func _on_body_entered(body):
 
 func _fade_and_destroy(delta):
 	var mat = mesh_instance.material_override
-	if mat:
-		var current_alpha = mat.albedo_color.a
-		current_alpha -= delta * 2.0 # Fade speed
-		mat.albedo_color.a = current_alpha
-		if current_alpha <= 0:
+	if mat is ShaderMaterial:
+		var current_dissolve = mat.get_shader_parameter("dissolve")
+		current_dissolve += delta * 1.5 # Fade speed
+		mat.set_shader_parameter("dissolve", current_dissolve)
+		
+		if current_dissolve >= 1.0:
 			queue_free()
 	else:
+		# Fallback
 		queue_free()
