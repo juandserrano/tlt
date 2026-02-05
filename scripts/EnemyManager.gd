@@ -63,34 +63,17 @@ func _on_enemy_hit_ground():
 func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
 	var enemy = enemy_scene.instantiate() as Enemy
 	enemy.enemy_class = enemy_class
-	var mesh_instance = enemy.get_node("MeshInstance3D") as MeshInstance3D
 	match enemy.enemy_class:
 		EnemyClass.Pawn:
-			mesh_instance.mesh = pawn_mesh
+			enemy.res = preload("res://resources/enemies/pawn.tres")
 		EnemyClass.Knight:
-			mesh_instance.mesh = knight_mesh
+			enemy.res = preload("res://resources/enemies/knight.tres")
 		EnemyClass.Bishop:
-			mesh_instance.mesh = bishop_mesh
+			enemy.res = preload("res://resources/enemies/bishop.tres")
 		EnemyClass.Queen:
-			mesh_instance.mesh = queen_mesh
+			enemy.res = preload("res://resources/enemies/queen.tres")
 		EnemyClass.King:
-			mesh_instance.mesh = king_mesh
-		_:
-			return
-	
-	# Update collision shape to match the mesh dimensions
-	var collision_shape = enemy.get_node("CollisionShape3D") as CollisionShape3D
-	var aabb = mesh_instance.mesh.get_aabb()
-	
-	# Create new box shape matching mesh dimensions
-	var new_shape = BoxShape3D.new()
-	new_shape.size = aabb.size
-	
-	# Update the collision shape
-	collision_shape.shape = new_shape
-	
-	# Center the collision shape on the mesh
-	collision_shape.position = aabb.get_center()
+			enemy.res = preload("res://resources/enemies/king.tres")
 	
 	enemies_container.add_child(enemy)
 	enemies_in_play.append(enemy)

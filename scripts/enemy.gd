@@ -1,8 +1,11 @@
 class_name Enemy
 extends Node3D
 
-var max_health: int = 1
+@export var res: EnemyResource
+var max_health: int
+var moves_per_turn: int
 var current_health: int
+
 
 const SPAWN_HEIGHT: int = 10
 
@@ -19,10 +22,27 @@ var has_hit_ground: bool = false # Track if enemy has landed
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$"MeshInstance3D".mesh = res.mesh
+	setup_collision_box()
+	max_health = res.max_health
+	current_health = max_health
 	# Set up input handling
 	set_process_input(true)
-	current_health = max_health
 
+func setup_collision_box():
+	# Update collision shape to match the mesh dimensions
+	var aabb = $"MeshInstance3D".mesh.get_aabb()
+	
+	# Create new box shape matching mesh dimensions
+	var new_shape = BoxShape3D.new()
+	new_shape.size = aabb.size
+	
+	# Update the collision shape
+	$CollisionShape3D.shape = new_shape
+	
+	# Center the collision shape on the mesh
+	$CollisionShape3D.position = aabb.get_center()
+	
 func move_to_tile(q: int, r: int):
 	# Update tile position
 	current_tile = Vector2i(q, r)

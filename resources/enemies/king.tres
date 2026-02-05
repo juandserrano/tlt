@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://by8qooyfgo3to"]
+
+[ext_resource type="ArrayMesh" uid="uid://tnrwv3eqt4oq" path="res://resources/models/enemies/king_mesh.tres" id="1_h71pa"]
+[ext_resource type="Script" uid="uid://nswr67dg4ln2" path="res://scripts/enemy_resource.gd" id="2_qt3ap"]
+
+[resource]
+script = ExtResource("2_qt3ap")
+max_health = 4
+mesh = ExtResource("1_h71pa")
+metadata/_custom_type_script = "uid://nswr67dg4ln2"

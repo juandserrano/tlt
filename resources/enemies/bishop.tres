@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://byegd6hdq1ap0"]
+
+[ext_resource type="ArrayMesh" uid="uid://c6c2ov41xubwb" path="res://resources/models/enemies/bishop_mesh.tres" id="1_ac6d6"]
+[ext_resource type="Script" uid="uid://nswr67dg4ln2" path="res://scripts/enemy_resource.gd" id="2_rcin2"]
+
+[resource]
+script = ExtResource("2_rcin2")
+max_health = 2
+mesh = ExtResource("1_ac6d6")
+metadata/_custom_type_script = "uid://nswr67dg4ln2"
