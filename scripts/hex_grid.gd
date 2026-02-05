@@ -132,3 +132,14 @@ func clear_highlights():
 			multimesh.set_instance_color(idx, original_colors[idx])
 	highlighted_indices.clear()
 	original_colors.clear()
+
+func is_dirt(coord: Vector2i) -> bool:
+	var val = noise.get_noise_2d(coord.x, coord.y)
+	return val >= noise_threshold
+
+func get_all_dirt_tiles() -> Array[Vector2i]:
+	var dirt_tiles: Array[Vector2i] = []
+	for tile_coord in tile_indices.keys():
+		if is_dirt(tile_coord):
+			dirt_tiles.append(tile_coord)
+	return dirt_tiles

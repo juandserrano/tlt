@@ -33,6 +33,48 @@ func cannonball(target_pos: Vector3):
 		return ball
 	return null
 
+func landmines():
+	var tree = Signals.get_tree()
+	if not tree: return
+	
+	var root = tree.root
+	var enemy_manager = root.get_node_or_null("Game/EnemyManager")
+	var hex_grid = root.get_node_or_null("Game/World/HexGrid")
+	var particle_manager = root.get_node_or_null("Game/ParticleManager")
+	
+	if not enemy_manager or not hex_grid:
+		print("Missing dependencies for landmines")
+		return
+	
+	print("Triggering landmines...")
+	
+	# 1. Spawn explosions on ALL dirt tiles
+	if particle_manager:
+		var dirt_tiles = hex_grid.get_all_dirt_tiles()
+		
+		# Sort by distance from center (0,0) for wave effect
+		dirt_tiles.sort_custom(func(a, b): return a.length() < b.length())
+		
+		var batch_size = 5
+		for i in range(dirt_tiles.size()):
+			var coord = dirt_tiles[i]
+			var world_pos = hex_grid.axial_to_world(coord.x, coord.y)
+			particle_manager.spawn_small_explosion(world_pos)
+			
+			# Yield every batch_size iterations
+			if i % batch_size == 0:
+				await tree.process_frame
+	
+	# 2. Damage enemies on dirt tiles
+	var hit_count = 0
+	for enemy in enemy_manager.enemies_in_play:
+		if is_instance_valid(enemy):
+			if hex_grid.is_dirt(enemy.current_tile):
+				enemy.take_damage(melee_damage)
+				hit_count += 1
+	
+	print("Landmines hit ", hit_count, " enemies.")
+
 func do_special_attack():
 	match card_type:
 		CardManager.CardType.Halo:
@@ -42,6 +84,6 @@ func do_special_attack():
 		CardManager.CardType.Cannonball:
 			pass # Handled via targeting mode in card.gd
 		CardManager.CardType.Landmines:
-			pass
+			landmines()
 		_:
 			return

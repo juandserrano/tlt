@@ -220,6 +220,8 @@ func finish_special_attack(pos: Vector3):
 
 func _on_special_attack_button_pressed():
 	do_special_attack()
+	if card_type == CardManager.CardType.Landmines:
+		card_manager.destroy_card_after_use(self)
 
 func spawn_arrow(target_enemy: Enemy):
 	var arrow = ARROW_SCENE.instantiate()
