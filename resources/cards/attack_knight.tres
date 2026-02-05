@@ -7,5 +7,5 @@
 script = ExtResource("1_w0aps")
 card_type = 1
 texture = ExtResource("2_w0aps")
-melee_damage = 2
+melee_damage = 1
 metadata/_custom_type_script = "uid://rhf81l75dhsp"
