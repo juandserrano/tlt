@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://cu1bvqq6jxlp3"]
+
+[ext_resource type="Script" uid="uid://rhf81l75dhsp" path="res://scripts/card_resource.gd" id="1_pumwn"]
+[ext_resource type="Texture2D" uid="uid://bo7o7640bvvnk" path="res://resources/textures/cards/landmines.png" id="2_pumwn"]
+
+[resource]
+script = ExtResource("1_pumwn")
+card_type = 8
+texture = ExtResource("2_pumwn")
+melee_damage = 1
+metadata/_custom_type_script = "uid://rhf81l75dhsp"

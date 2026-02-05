@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://bnlnkq01pax4r"]
+
+[ext_resource type="Script" uid="uid://rhf81l75dhsp" path="res://scripts/card_resource.gd" id="1_w4n0w"]
+[ext_resource type="Texture2D" uid="uid://bked6obt78sea" path="res://resources/textures/cards/cannonball.png" id="2_w4n0w"]
+
+[resource]
+script = ExtResource("1_w4n0w")
+card_type = 7
+texture = ExtResource("2_w4n0w")
+melee_damage = 1
+metadata/_custom_type_script = "uid://rhf81l75dhsp"

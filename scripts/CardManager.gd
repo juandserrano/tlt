@@ -108,10 +108,13 @@ func draw_cards_to_available_slots():
 	while true:
 		var slot = get_next_available_slot()
 		if slot < 0: return
-		await draw_card_to_slot(slot)
+		# For now pick random card
+		var cType = CardType.values().pick_random()
+		await draw_card_to_slot(cType, slot)
 
-func draw_card_to_slot(slot: int):
+func draw_card_to_slot(card_type: CardType, slot: int):
 	var card: Card = card_scene.instantiate()
+	card.card_resource = get_card_resource(card_type)
 	card_container.add_child(card)
 	add_card_to_grid(card, slot)
 	
@@ -121,6 +124,31 @@ func draw_card_to_slot(slot: int):
 	
 	# Animate card into position and wait for it to complete
 	await card.animate_draw_to_position()
+
+func get_card_resource(card_type: CardType) -> CardResource:
+	match card_type:
+		CardType.Pawn:
+			return preload("res://resources/cards/attack_pawn.tres")
+		CardType.Knight:
+			return preload("res://resources/cards/attack_knight.tres")
+		CardType.Bishop:
+			return preload("res://resources/cards/attack_bishop.tres")
+		CardType.Queen:
+			return preload("res://resources/cards/attack_queen.tres")
+		CardType.King:
+			return preload("res://resources/cards/attack_king.tres")
+		CardType.Fog:
+			return preload("res://resources/cards/fog.tres")
+		CardType.Halo:
+			return preload("res://resources/cards/halo.tres")
+		CardType.Moat:
+			return preload("res://resources/cards/moat.tres")
+		CardType.Cannonball:
+			return preload("res://resources/cards/cannonball.tres")
+		CardType.Landmines:
+			return preload("res://resources/cards/landmines.tres")
+		_:
+			return null
 
 
 # Initialize grid slots

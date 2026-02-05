@@ -3,6 +3,7 @@ class_name Card extends Button
 @export var angle_x_max: float = 15.0
 @export var angle_y_max: float = 15.0
 @export var max_offset_shadow: float = 50.0
+@export var card_resource: CardResource
 
 var tween_rot: Tween
 var tween_hover: Tween
@@ -21,7 +22,7 @@ var is_selected: bool = false
 var is_selected_for_discard: bool = false
 var card_type: CardManager.CardType
 const selected_card_offset: Vector2 = Vector2(0, -20)
-var card_damage: int = 1
+var card_damage: int
 #########################################
 
 # Grid positioning
@@ -32,6 +33,9 @@ var grid_slot_index: int = -1 # Which grid slot this card occupies
 @onready var card_manager: CardManager = get_node("/root/Game/CardManager")
 
 func _ready() -> void:
+	card_type = card_resource.card_type
+	card_damage = card_resource.melee_damage
+	$Texture.texture = card_resource.texture
 	# Convert to radians because lerp_angle is using that
 	angle_x_max = deg_to_rad(angle_x_max)
 	angle_y_max = deg_to_rad(angle_y_max)
@@ -202,20 +206,23 @@ func attack_enemy(enemy: Enemy):
 				print("attack pawn")
 		CardManager.CardType.Knight:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Knight:
+				enemy.take_damage(card_damage)
 				card_manager.destroy_card_after_use(self)
 				print("attack knight")
 		CardManager.CardType.Bishop:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Bishop:
+				enemy.take_damage(card_damage)
 				card_manager.destroy_card_after_use(self)
 				print("attack bishop")
 		CardManager.CardType.Queen:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Queen:
+				enemy.take_damage(card_damage)
 				card_manager.destroy_card_after_use(self)
 				print("attack queen")
 		CardManager.CardType.King:
 			if enemy.enemy_class == EnemyManager.EnemyClass.King:
+				enemy.take_damage(card_damage)
 				card_manager.destroy_card_after_use(self)
 				print("attack king")
 		_:
 			return
-	

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://y2bxj306yudt"]
+
+[ext_resource type="Script" uid="uid://rhf81l75dhsp" path="res://scripts/card_resource.gd" id="1_55mn7"]
+[ext_resource type="Texture2D" uid="uid://v5hmfqo8v4il" path="res://resources/textures/cards/attack_queen.png" id="2_55mn7"]
+
+[resource]
+script = ExtResource("1_55mn7")
+card_type = 4
+texture = ExtResource("2_55mn7")
+melee_damage = 1
+metadata/_custom_type_script = "uid://rhf81l75dhsp"

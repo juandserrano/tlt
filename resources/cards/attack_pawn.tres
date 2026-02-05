@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://dftw4jbduoykn"]
+
+[ext_resource type="Script" uid="uid://rhf81l75dhsp" path="res://scripts/card_resource.gd" id="1_8j72h"]
+[ext_resource type="Texture2D" uid="uid://bgwl8j17ep2rp" path="res://resources/textures/cards/attack_pawn.png" id="2_rksb2"]
+
+[resource]
+script = ExtResource("1_8j72h")
+texture = ExtResource("2_rksb2")
+melee_damage = 1
+metadata/_custom_type_script = "uid://rhf81l75dhsp"

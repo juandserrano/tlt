@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://c26tf04o1f5o1"]
+
+[ext_resource type="Script" uid="uid://rhf81l75dhsp" path="res://scripts/card_resource.gd" id="1_detlf"]
+[ext_resource type="Texture2D" uid="uid://bt116n4h3rwfu" path="res://resources/textures/cards/moat.png" id="2_detlf"]
+
+[resource]
+script = ExtResource("1_detlf")
+card_type = 6
+texture = ExtResource("2_detlf")
+melee_damage = 1
+metadata/_custom_type_script = "uid://rhf81l75dhsp"
