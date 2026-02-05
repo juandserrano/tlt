@@ -7,4 +7,5 @@
 script = ExtResource("1_of228")
 card_type = 9
 texture = ExtResource("2_of228")
+is_autoplay = true
 metadata/_custom_type_script = "uid://rhf81l75dhsp"

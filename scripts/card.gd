@@ -197,6 +197,9 @@ func _on_mouse_exited() -> void:
 	tween_hover = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 	tween_hover.tween_property(self, "scale", Vector2.ONE, 0.55)
 
+func do_special_attack():
+	card_resource.do_special_attack()
+
 func attack_enemy(enemy: Enemy):
 	match card_type:
 		CardManager.CardType.Pawn:

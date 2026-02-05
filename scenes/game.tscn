@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://dtxb477ydsldy" path="res://scripts/GameManager.gd" id="6_u5sy4"]
 [ext_resource type="Script" uid="uid://d3aeukmw5pr1y" path="res://scripts/ParticleManager.gd" id="9_0tnpc"]
 [ext_resource type="Script" uid="uid://daiqnvt8muuy1" path="res://scripts/CardManager.gd" id="10_vtaks"]
-[ext_resource type="PackedScene" uid="uid://bbcqlh8frux75" path="res://scenes/Card.tscn" id="11_kvpfn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iywne"]
 render_priority = 0
@@ -120,28 +119,3 @@ offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-
-[node name="Card" parent="GameplayUI/GridContainer" unique_id=711558565 instance=ExtResource("11_kvpfn")]
-layout_mode = 0
-offset_top = 0.0
-offset_bottom = 214.0
-
-[node name="Card2" parent="GameplayUI/GridContainer" unique_id=1034242828 instance=ExtResource("11_kvpfn")]
-layout_mode = 0
-offset_top = 0.0
-offset_bottom = 214.0
-
-[node name="Card3" parent="GameplayUI/GridContainer" unique_id=1312507665 instance=ExtResource("11_kvpfn")]
-layout_mode = 0
-offset_top = 0.0
-offset_bottom = 214.0
-
-[node name="Card4" parent="GameplayUI/GridContainer" unique_id=333815368 instance=ExtResource("11_kvpfn")]
-layout_mode = 0
-offset_top = 0.0
-offset_bottom = 214.0
-
-[node name="Card5" parent="GameplayUI/GridContainer" unique_id=361406569 instance=ExtResource("11_kvpfn")]
-layout_mode = 0
-offset_top = 0.0
-offset_bottom = 214.0

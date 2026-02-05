@@ -53,7 +53,8 @@ func _ready() -> void:
 	
 	# Position existing cards in the scene
 	await get_tree().process_frame # Wait for cards to be ready
-	position_existing_cards()
+	# position_existing_cards()
+	draw_cards_to_available_slots()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -65,6 +66,9 @@ func _process(_delta: float) -> void:
 			var target_enemy = get_enemy_under_mouse()
 			if target_enemy != null:
 				currently_selected_card.attack_enemy(target_enemy)
+			else:
+				currently_selected_card.do_special_attack()
+
 	if Input.is_action_just_pressed("Draw"):
 		draw_cards_to_available_slots()
 
@@ -238,6 +242,7 @@ func discard_cards():
 
 # Handle card selection - ensures only one card is selected at a time
 func select_card_for_play(card: Card) -> void:
+	if card.card_resource.is_autoplay: return
 	# Don't let play cards while discarding
 	if len(cards_for_discard) > 0: return
 	# If clicking the same card, deselect it
@@ -255,6 +260,7 @@ func select_card_for_play(card: Card) -> void:
 	currently_selected_card = card
 
 func select_card_for_discard(card: Card) -> void:
+	if card.card_resource.is_autoplay: return
 	# Don't let discard while playing cards
 	if currently_selected_card != null: return
 	
