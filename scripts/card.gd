@@ -208,7 +208,15 @@ func _on_mouse_exited() -> void:
 		tween_hover.tween_property(self, "scale", Vector2.ONE, 0.55)
 
 func do_special_attack():
-	card_resource.do_special_attack()
+	if card_type == CardManager.CardType.Cannonball:
+		card_manager.start_special_targeting(self)
+	else:
+		card_resource.do_special_attack()
+
+func finish_special_attack(pos: Vector3):
+	if card_type == CardManager.CardType.Cannonball:
+		return card_resource.cannonball(pos)
+	return null
 
 func _on_special_attack_button_pressed():
 	do_special_attack()

@@ -58,10 +58,45 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("Draw"):
+		draw_cards_to_available_slots()
+
+var targeting_mode_card: Card = null
+
+func start_special_targeting(card: Card):
+	targeting_mode_card = card
+	# Could add visual cursor change here
+
+func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("Execute Discard"):
 		discard_cards()
-	if currently_selected_card != null:
+		
+	if targeting_mode_card != null:
+		if Input.is_action_just_pressed("spawn_enemy"): # Left click
+			var ground_click_pos = get_ground_position_under_mouse()
+			if ground_click_pos != null:
+				targeting_mode_card.finish_special_attack(ground_click_pos)
+				var hex_grid = get_node("/root/Game/World/HexGrid")
+				if hex_grid: hex_grid.clear_highlights()
+				destroy_card_after_use(targeting_mode_card)
+				targeting_mode_card = null
+		
+		# Visualize targeting
+		if targeting_mode_card != null:
+			var ground_hover_pos = get_ground_position_under_mouse()
+			if ground_hover_pos != null:
+				var hex_grid = get_node("/root/Game/World/HexGrid")
+				if hex_grid:
+					var coord = hex_grid.world_to_axial(Vector3(ground_hover_pos.x, 0, ground_hover_pos.z))
+					hex_grid.highlight_tiles(coord)
+		
+		# Cancel on right click?
+		elif Input.is_action_just_pressed("Execute Discard"): # Right click usually context sensitive
+			targeting_mode_card = null
+			var hex_grid = get_node("/root/Game/World/HexGrid")
+			hex_grid.clear_highlights()
+			
+	elif currently_selected_card != null:
 		if Input.is_action_just_pressed("spawn_enemy"):
 			var target_enemy = get_enemy_under_mouse()
 			if target_enemy != null:
@@ -69,6 +104,14 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed("Draw"):
 		draw_cards_to_available_slots()
+
+func get_ground_position_under_mouse():
+	if camera == null: return null
+	var mouse_pos = get_viewport().get_mouse_position()
+	var from = camera.project_ray_origin(mouse_pos)
+	var dir = camera.project_ray_normal(mouse_pos)
+	var ground_plane = Plane(Vector3.UP, 0)
+	return ground_plane.intersects_ray(from, dir)
 
 # Returns only the first (closest) enemy hit, or null if no enemy is hit
 func get_enemy_under_mouse() -> Enemy:

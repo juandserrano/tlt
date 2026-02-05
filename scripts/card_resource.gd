@@ -7,8 +7,31 @@ class_name CardResource extends Resource
 @export var is_autoplay: bool = false
 
 func halo():
-	if card_type == CardManager.CardType.Halo:
 		print("haloooo")
+
+const CANNONBALL_SCENE = preload("res://scenes/Cannonball.tscn")
+
+func cannonball(target_pos: Vector3):
+	var tree = Signals.get_tree()
+	if not tree: return
+	
+	var root = tree.root
+	var player_tower = root.get_node_or_null("Game/PlayerTower")
+	var world = root.get_node_or_null("Game/World")
+	
+	if not player_tower or not world:
+		print("Missing dependencies for cannonball")
+		return
+
+	if target_pos:
+		var ball = CANNONBALL_SCENE.instantiate()
+		world.add_child(ball)
+		ball.global_position = player_tower.global_position + Vector3(0, 3.5, 0)
+		ball.target_pos = target_pos
+		ball.damage = melee_damage
+		print("Cannonball fired at ", target_pos)
+		return ball
+	return null
 
 func do_special_attack():
 	match card_type:
@@ -17,7 +40,7 @@ func do_special_attack():
 		CardManager.CardType.Moat:
 			pass
 		CardManager.CardType.Cannonball:
-			pass
+			pass # Handled via targeting mode in card.gd
 		CardManager.CardType.Landmines:
 			pass
 		_:
