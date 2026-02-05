@@ -198,20 +198,24 @@ func attack_enemy(enemy: Enemy):
 		CardManager.CardType.Pawn:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Pawn:
 				enemy.take_damage(card_damage)
+				card_manager.destroy_card_after_use(self)
 				print("attack pawn")
 		CardManager.CardType.Knight:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Knight:
+				card_manager.destroy_card_after_use(self)
 				print("attack knight")
 		CardManager.CardType.Bishop:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Bishop:
+				card_manager.destroy_card_after_use(self)
 				print("attack bishop")
 		CardManager.CardType.Queen:
 			if enemy.enemy_class == EnemyManager.EnemyClass.Queen:
+				card_manager.destroy_card_after_use(self)
 				print("attack queen")
 		CardManager.CardType.King:
 			if enemy.enemy_class == EnemyManager.EnemyClass.King:
+				card_manager.destroy_card_after_use(self)
 				print("attack king")
 		_:
 			return
 	
-	card_manager.destroy_card_after_use(self)

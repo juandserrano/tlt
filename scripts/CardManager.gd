@@ -65,7 +65,6 @@ func _process(_delta: float) -> void:
 func draw_cards_to_available_slots():
 	while true:
 		var slot = get_next_available_slot()
-		print(slot)
 		if slot < 0: return
 		await draw_card_to_slot(slot)
 
