@@ -2,6 +2,7 @@ extends Area3D
 
 var damage: int = 0
 var max_radius: float = 30.0 # Approximate hex grid extent
+var fade_radius: float = 20.0
 var expansion_speed: float = 15.0
 var current_radius: float = 1.0
 
@@ -35,7 +36,7 @@ func _process(delta):
 		# Update Shader Radius (Normalized 0..1 relative to max_radius)
 		# We subtract a bit to keep it inside the mesh bounds
 		var normalized_radius = (current_radius / max_radius) * 0.9
-		var normalized_thickness = 0.5 / max_radius # Constant world thickness ~0.5 units
+		var normalized_thickness = 0.2 / max_radius # Thinner ring (was 0.5)
 		
 		# User wanted edge radius smaller (thinner), so small thickness
 		
@@ -47,7 +48,7 @@ func _process(delta):
 		# Update Collision (Scale to fit)
 		collision_shape.scale = Vector3(current_radius, 1.0, current_radius)
 		
-	else:
+	if current_radius > fade_radius:
 		# Fade out and destroy
 		_fade_and_destroy(delta)
 

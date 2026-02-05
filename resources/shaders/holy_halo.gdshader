@@ -9,6 +9,17 @@ uniform float thickness : hint_range(0.0, 0.5) = 0.02;
 uniform float wobble_frequency : hint_range(0.0, 20.0) = 10.0;
 uniform float wobble_amplitude : hint_range(0.0, 0.5) = 0.05;
 
+void vertex() {
+	float dist_from_center = length(VERTEX.xz);
+	
+	// Create a wave that moves outward from center
+	// Using dist_from_center makes the wave radial
+	float wave = sin(dist_from_center * wobble_frequency - TIME * 5.0);
+	
+	// Apply height displacement
+	VERTEX.y += wave * wobble_amplitude;
+}
+
 void fragment() {
 	// 1. Map UV coordinates to [-1, 1] range for SDF calculation
 	vec2 uv = UV * 2.0 - 1.0;

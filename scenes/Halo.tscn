@@ -12,9 +12,15 @@ render_priority = 0
 shader = ExtResource("2_shader")
 shader_parameter/main_color = Color(1, 0.9, 0.4, 1)
 shader_parameter/dissolve = 0.0
+shader_parameter/radius = 0.0850000040375
+shader_parameter/thickness = 0.10000000475
+shader_parameter/wobble_frequency = 20.0
+shader_parameter/wobble_amplitude = 0.030000001425
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_visual"]
 material = SubResource("ShaderMaterial_halo")
+subdivide_width = 32
+subdivide_depth = 32
 
 [node name="Halo" type="Area3D" unique_id=1424659313]
 script = ExtResource("1_script")
