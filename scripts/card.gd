@@ -210,6 +210,8 @@ func _on_mouse_exited() -> void:
 func do_special_attack():
 	if card_type == CardManager.CardType.Cannonball:
 		card_manager.start_special_targeting(self)
+	elif card_type == CardManager.CardType.Halo:
+		card_manager.start_halo_qte(self)
 	else:
 		card_resource.do_special_attack()
 

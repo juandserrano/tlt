@@ -56,13 +56,32 @@ func _ready() -> void:
 	# position_existing_cards()
 	draw_cards_to_available_slots()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-	if Input.is_action_just_pressed("Draw"):
-		draw_cards_to_available_slots()
-
 var targeting_mode_card: Card = null
 var targeting_input_cooldown: int = 0
+var qte_scene = preload("res://scenes/QTEGauge.tscn")
+var is_qte_active: bool = false
+
+func start_halo_qte(card: Card):
+	is_qte_active = true
+	var qte = qte_scene.instantiate()
+	card_container.add_child(qte)
+	qte.global_position = Vector2(card_container.size.x / 2.0, card_container.size.y / 2.0)
+	
+	qte.qte_result.connect(func(success): _on_halo_qte_result(success, card))
+
+func _on_halo_qte_result(success: bool, card: Card):
+	is_qte_active = false
+	if success:
+		print("Halo QTE Success!")
+		card.card_resource.halo()
+	else:
+		print("Halo QTE Failed!")
+		var player_tower = get_node("/root/Game/PlayerTower")
+		if player_tower:
+			player_tower.damage_player(1)
+	
+	destroy_card_after_use(card)
+
 
 func start_special_targeting(card: Card):
 	targeting_mode_card = card

@@ -4,6 +4,7 @@ class_name GameManager extends Node
 @export var player: Player
 @export var audio_stream_player: AudioStreamPlayer
 @export var particle_manager: ParticleManager
+@export var card_manager: CardManager
 
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
@@ -31,6 +32,9 @@ func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
 func _ready() -> void:
 	if not particle_manager:
 		particle_manager = get_tree().current_scene.find_child("ParticleManager")
+	
+	if not card_manager:
+		card_manager = get_tree().current_scene.find_child("CardManager", true, false)
 
 	Signals.enemy_attacked_player.connect(_on_enemy_attacked_player)
 	state = GameState.Spawning
@@ -50,6 +54,8 @@ func do_spawn_phase():
 	enemy_manager.spawn_round_wave(1)
 
 func do_player_turn():
+	if card_manager and card_manager.is_qte_active: return
+	
 	if Input.is_action_just_pressed("next turn"):
 		state = GameState.Resolve
 
