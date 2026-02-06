@@ -118,6 +118,9 @@ func is_tile_occupied(q: int, r: int) -> bool:
 	return false
 
 func enemies_move_or_attack():
+	# Optional: Get reference to hex_grid here or at class level if not already available
+	var hex_grid = get_node("/root/Game/World/HexGrid")
+
 	for enemy in enemies_in_play:
 		#Check if enemy is at striking distance from player
 		if hex_distance(enemy.current_tile, player_tower.current_tile) == 2:
@@ -132,6 +135,18 @@ func enemies_move_or_attack():
 		var moved = false
 		for neighbor in sorted_neighbors:
 			if not is_tile_occupied(neighbor.x, neighbor.y):
+				# MOAT LOGIC START
+				if hex_grid and hex_grid.is_moat(neighbor):
+					# Attempting to move into a moat tile
+					print("Enemy tried to cross moat at ", neighbor)
+					# Shore up the tile (remove moat)
+					hex_grid.set_tile_as_moat(neighbor, false)
+					# Enemy stays still
+					moved = true # "Action taken", effectively.
+					await get_tree().create_timer(0.1).timeout
+					break
+				# MOAT LOGIC END
+				
 				enemy.move_to_tile(neighbor.x, neighbor.y)
 				await get_tree().create_timer(0.1).timeout
 				moved = true
@@ -140,6 +155,7 @@ func enemies_move_or_attack():
 		# If no valid move found, enemy stays in place
 		if not moved:
 			pass # Enemy cannot move this turn
+
 
 # Returns all neighboring tiles sorted by distance to target (closest first)
 func get_neighbors_sorted_by_distance(from_tile: Vector2i, target_coord: Vector2i) -> Array[Vector2i]:

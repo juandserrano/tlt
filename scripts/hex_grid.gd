@@ -67,6 +67,17 @@ func setup_grid():
 			
 			tile_indices[Vector2i(q, r)] = index
 			index += 1
+	
+	# Add single large water plane
+	if not has_node("WaterPlane"):
+		var water = water_plane_scene.instantiate()
+		water.name = "WaterPlane"
+		add_child(water)
+		# Calculate approximate size to cover grid
+		# Radius * TileSize * 2 roughly
+		var size = grid_radius * DEFAULT_TILE_SIZE * 2.5
+		water.scale = Vector3(size, 1, size)
+		water.position = Vector3(0, -0.3, 0) # Slightly below lowered tile level (-1.0 + 0.4 buffer?) NO, tile lowers by 1.0. Ground is 0. So lowered is -1. Water should be at -0.3 approx.
 
 func axial_to_world(q: int, r: int) -> Vector3:
 	var x = DEFAULT_TILE_SIZE * (sqrt(3.0) * q + sqrt(3.0) / 2.0 * r)
@@ -143,3 +154,42 @@ func get_all_dirt_tiles() -> Array[Vector2i]:
 		if is_dirt(tile_coord):
 			dirt_tiles.append(tile_coord)
 	return dirt_tiles
+
+# --- MOAT FUNCTIONALITY ---
+var moat_tiles: Dictionary = {} # tile_coord: bool
+var water_plane_scene: PackedScene = preload("res://scenes/WaterPlane.tscn")
+
+func set_tile_as_moat(coord: Vector2i, is_moat_tile: bool):
+	if not tile_indices.has(coord): return
+	
+	var idx = tile_indices[coord]
+	var current_y = multimesh.get_instance_transform(idx).origin.y
+	
+	if is_moat_tile:
+		if moat_tiles.has(coord): return # Already a moat
+		
+		# Animate lowering
+		animate_tile_y(idx, current_y, current_y - 0.7)
+		moat_tiles[coord] = true
+		
+	else:
+		if not moat_tiles.has(coord): return # Not a moat
+		
+		# Animate raising
+		animate_tile_y(idx, current_y, current_y + 0.7)
+		moat_tiles.erase(coord)
+
+func animate_tile_y(instance_idx: int, start_y: float, end_y: float):
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_method(func(y): _set_tile_y(instance_idx, y), start_y, end_y, 0.5)
+
+func _set_tile_y(instance_idx: int, y: float):
+	var transf = multimesh.get_instance_transform(instance_idx)
+	transf.origin.y = y
+	multimesh.set_instance_transform(instance_idx, transf)
+
+
+func is_moat(coord: Vector2i) -> bool:
+	return moat_tiles.has(coord)

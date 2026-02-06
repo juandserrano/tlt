@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://water_plane_scene"]
+
+[ext_resource type="Shader" path="res://resources/shaders/water.gdshader" id="1_water"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+render_priority = 0
+shader = ExtResource("1_water")
+shader_parameter/albedo = Color(0, 0.368627, 0.733333, 1)
+shader_parameter/albedo2 = Color(0.247059, 0.709804, 0.886275, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.02
+shader_parameter/wave_speed = 3.0
+shader_parameter/wave_amplitude = 0.1
+shader_parameter/wave_frequency = 4.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_water"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.5
+radial_segments = 6
+
+[node name="WaterPlane" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+mesh = SubResource("CylinderMesh_water")
+surface_material_override/0 = SubResource("ShaderMaterial_water")

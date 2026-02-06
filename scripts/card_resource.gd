@@ -8,6 +8,51 @@ class_name CardResource extends Resource
 
 const HALO_SCENE = preload("res://scenes/Halo.tscn")
 
+func moat():
+	var tree = Signals.get_tree()
+	if not tree: return
+	
+	var root = tree.root
+	var player_tower = root.get_node_or_null("Game/PlayerTower")
+	var hex_grid = root.get_node_or_null("Game/World/HexGrid")
+	var enemy_manager = root.get_node_or_null("Game/EnemyManager")
+	
+	if not player_tower or not hex_grid or not enemy_manager:
+		print("Missing dependencies for moat")
+		return
+
+	print("Activating Moat...")
+	
+	# Get player position
+	var center_coord = player_tower.current_tile
+	
+	# Get all tiles at distance 2
+	var targets = []
+	var distance = 2
+	for q in range(-distance, distance + 1):
+		for r in range(-distance, distance + 1):
+			if (abs(q) + abs(r) + abs(q + r)) / 2 == distance:
+				targets.append(Vector2i(q, r))
+	
+	for n in targets:
+		var target_coord = center_coord + n
+		
+		# Check if occupied by enemy
+		var enemy_on_tile = null
+		for enemy in enemy_manager.enemies_in_play:
+			if enemy.current_tile == target_coord:
+				enemy_on_tile = enemy
+				break
+		
+		if enemy_on_tile:
+			# Damage enemy
+			print("Moat blocked by enemy at ", target_coord, ". Dealing damage.")
+			enemy_on_tile.take_damage(melee_damage)
+		else:
+			# Turn into moat
+			print("Creating moat at ", target_coord)
+			hex_grid.set_tile_as_moat(target_coord, true)
+
 func halo():
 	print("haloooo")
 	var tree = Signals.get_tree()
@@ -101,7 +146,7 @@ func do_special_attack():
 		CardManager.CardType.Halo:
 			halo()
 		CardManager.CardType.Moat:
-			pass
+			moat()
 		CardManager.CardType.Cannonball:
 			pass # Handled via targeting mode in card.gd
 		CardManager.CardType.Landmines:
