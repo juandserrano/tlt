@@ -58,6 +58,8 @@ func spawn_round_wave(round_number: int):
 
 func _on_enemy_hit_ground():
 	audio_stream_player.stream = sound_falling_impact
+	var rand_pitch = randf_range(0.8, 1.2)
+	audio_stream_player.pitch_scale = rand_pitch
 	audio_stream_player.play()
 
 func spawn_enemy_of_class(enemy_class: EnemyClass) -> void:
