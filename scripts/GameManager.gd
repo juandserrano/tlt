@@ -55,9 +55,13 @@ func do_spawn_phase():
 
 func do_player_turn():
 	if card_manager and card_manager.is_qte_active: return
-	
-	if Input.is_action_just_pressed("next turn"):
-		state = GameState.Resolve
+
+# Handle input during player turn (only fires if GUI didn't consume the event)
+func _unhandled_input(event: InputEvent) -> void:
+	if state == GameState.PlayerTurn:
+		if event.is_action_pressed("next turn"):
+			state = GameState.Resolve
+			get_viewport().set_input_as_handled()
 
 func do_enemies_turn():
 	if processing_enemies: return

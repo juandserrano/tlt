@@ -88,15 +88,39 @@ func start_special_targeting(card: Card):
 	targeting_input_cooldown = 10 # Prevent immediate firing from the same click
 	# Could add visual cursor change here
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	# Decrement cooldown timer
 	if targeting_input_cooldown > 0:
 		targeting_input_cooldown -= 1
-
-	if Input.is_action_just_pressed("Execute Discard"):
-		discard_cards()
-		
+	
+	# Visualize targeting (continuous update, not input-based)
 	if targeting_mode_card != null:
-		if Input.is_action_just_pressed("spawn_enemy") and targeting_input_cooldown == 0: # Left click
+		var ground_hover_pos = get_ground_position_under_mouse()
+		if ground_hover_pos != null:
+			var hex_grid = get_node("/root/Game/World/HexGrid")
+			if hex_grid:
+				var coord = hex_grid.world_to_axial(Vector3(ground_hover_pos.x, 0, ground_hover_pos.z))
+				hex_grid.highlight_tiles(coord)
+
+# Handle world input (only fires if GUI didn't consume the event)
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		# Handle keyboard inputs
+		if event.is_action_pressed("Execute Discard"):
+			discard_cards()
+			get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("Draw"):
+			draw_cards_to_available_slots()
+			get_viewport().set_input_as_handled()
+		return
+	
+	# Only process mouse button press events
+	if not event.pressed:
+		return
+	
+	# Handle targeting mode clicks
+	if targeting_mode_card != null:
+		if event.button_index == MOUSE_BUTTON_LEFT and targeting_input_cooldown == 0:
 			var ground_click_pos = get_ground_position_under_mouse()
 			if ground_click_pos != null:
 				targeting_mode_card.finish_special_attack(ground_click_pos)
@@ -104,30 +128,21 @@ func _process(delta: float) -> void:
 				if hex_grid: hex_grid.clear_highlights()
 				destroy_card_after_use(targeting_mode_card)
 				targeting_mode_card = null
-		
-		# Visualize targeting
-		if targeting_mode_card != null:
-			var ground_hover_pos = get_ground_position_under_mouse()
-			if ground_hover_pos != null:
-				var hex_grid = get_node("/root/Game/World/HexGrid")
-				if hex_grid:
-					var coord = hex_grid.world_to_axial(Vector3(ground_hover_pos.x, 0, ground_hover_pos.z))
-					hex_grid.highlight_tiles(coord)
-		
-		# Cancel on right click?
-		elif Input.is_action_just_pressed("Execute Discard"): # Right click usually context sensitive
+				get_viewport().set_input_as_handled()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			# Cancel targeting mode
 			targeting_mode_card = null
 			var hex_grid = get_node("/root/Game/World/HexGrid")
-			hex_grid.clear_highlights()
-			
+			if hex_grid: hex_grid.clear_highlights()
+			get_viewport().set_input_as_handled()
+	
+	# Handle enemy attack clicks
 	elif currently_selected_card != null:
-		if Input.is_action_just_pressed("spawn_enemy"):
+		if event.button_index == MOUSE_BUTTON_LEFT:
 			var target_enemy = get_enemy_under_mouse()
 			if target_enemy != null:
 				currently_selected_card.attack_enemy(target_enemy)
-
-	if Input.is_action_just_pressed("Draw"):
-		draw_cards_to_available_slots()
+				get_viewport().set_input_as_handled()
 
 func get_ground_position_under_mouse():
 	if camera == null: return null

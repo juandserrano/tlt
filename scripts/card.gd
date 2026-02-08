@@ -169,8 +169,13 @@ func handle_right_mouse_click(event: InputEvent) -> void:
 		card_manager.select_card_for_discard(self)
 
 func _gui_input(event: InputEvent) -> void:
-	handle_left_mouse_click(event)
-	handle_right_mouse_click(event)
+	# Handle mouse clicks and consume the event to prevent propagation
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT:
+			handle_left_mouse_click(event)
+			handle_right_mouse_click(event)
+			accept_event() # Prevent click from propagating to nodes behind the card
+			return
 	
 	if not event is InputEventMouseMotion: return
 	
