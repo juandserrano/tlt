@@ -6,18 +6,24 @@ uniform float metallic : hint_range(0.0, 1.0) = 0.0;
 uniform float roughness : hint_range(0.0, 1.0) = 0.02;
 uniform sampler2D texture_normal;
 uniform sampler2D texture_normal2;
+uniform sampler2D wave;
 uniform float wave_speed = 3.0;
 uniform float wave_amplitude = 0.2;
 uniform float wave_frequency = 4.0;
 uniform vec2 wave_direction = vec2(2.0, 0.0);
 uniform vec2 wave_direction2 = vec2(0.0, 1.0);
 uniform float time_scale : hint_range(0.0, 0.2, 0.005) = 0.025;
+uniform float noise_scale = 10.0;
+uniform float height_scale = 0.15;
 
 uniform vec4 color_deep : source_color;
 uniform vec4 color_shallow : source_color;
 uniform float beers_law = 2.0;
 uniform float depth_offset = -0.75;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
+varying vec3 world_pos;
+varying float height;
 
 uniform float edge_scale = 0.1;
 uniform float near = 1.0;
@@ -35,8 +41,9 @@ float edge(float depth){
 }
 
 void vertex() {
-	float wave = sin(VERTEX.x * wave_frequency + TIME * wave_speed) * cos(VERTEX.z * wave_frequency + TIME * wave_speed);
-	VERTEX.y += wave * wave_amplitude;
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	height = texture(wave, world_pos.xz / noise_scale + TIME * time_scale).r;
+	VERTEX.y += height * height_scale;
 }
 
 void fragment() {
@@ -57,7 +64,7 @@ void fragment() {
 	
 	vec2 time = (TIME * wave_direction) * time_scale;
 	vec2 time2 = (TIME * wave_direction2) * time_scale;
-	vec3 normal_blend = mix(texture(texture_normal, UV + time).rgb, texture(texture_normal2, UV + time2).rgb, 0.5);
+	vec3 normal_blend = mix(texture(texture_normal, world_pos.xz + time).rgb, texture(texture_normal2, world_pos.xz + time2).rgb, 0.5);
 	float fresnel = fresnel(5.0, NORMAL, VIEW);
 	vec3 surface_color = mix(albedo, albedo2, fresnel);
 	

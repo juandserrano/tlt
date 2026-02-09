@@ -23,6 +23,14 @@ seamless = true
 as_normal_map = true
 bump_strength = 7.6
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p2yne"]
+noise_type = 3
+frequency = 0.0026
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2sdci"]
+noise = SubResource("FastNoiseLite_p2yne")
+seamless = true
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1ees"]
 render_priority = 0
 shader = ExtResource("1_water")
@@ -32,20 +40,23 @@ shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.0
 shader_parameter/texture_normal = SubResource("NoiseTexture2D_p2yne")
 shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_abwsr")
+shader_parameter/wave = SubResource("NoiseTexture2D_2sdci")
 shader_parameter/wave_speed = 0.555
 shader_parameter/wave_amplitude = 0.07
 shader_parameter/wave_frequency = 4.555
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.00999999977648
+shader_parameter/noise_scale = 10.0
+shader_parameter/height_scale = 0.15
 shader_parameter/color_deep = Color(0.3, 0.5, 0.6, 1)
 shader_parameter/color_shallow = Color(0.01, 0.2, 0.3, 1)
-shader_parameter/beers_law = 0.13
+shader_parameter/beers_law = 2.0
 shader_parameter/depth_offset = -0.75
-shader_parameter/edge_scale = 0.025
-shader_parameter/near = 0.055
+shader_parameter/edge_scale = -0.165
+shader_parameter/near = 1.0
 shader_parameter/far = 100.0
-shader_parameter/edge_color = Color(0.6556008, 0.6556009, 0.6556008, 1)
+shader_parameter/edge_color = Color(0.6310349, 0.631035, 0.6310349, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_m6j1k"]
 material = SubResource("ShaderMaterial_c1ees")
@@ -54,5 +65,6 @@ subdivide_depth = 200
 orientation = 1
 
 [node name="WaterPlane" type="MeshInstance3D" unique_id=1243415429]
-transform = Transform3D(5.46, 0, 0, 0, 1, 0, 0, 0, 5.46, 0, -0.3, 0)
+transform = Transform3D(5.46, 0, 0, 0, 1, 0, 0, 0, 5.46, 0, 0, 0)
+cast_shadow = 0
 mesh = SubResource("QuadMesh_m6j1k")
