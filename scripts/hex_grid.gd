@@ -29,6 +29,7 @@ const DEFAULT_TILE_SIZE: float = 0.58
 		if Engine.is_editor_hint(): # Only run in editor if we're actually in the editor
 			setup_grid() # Adjust this to change green/brown balance
 @export var pawn: Enemy
+@export var grass_patch: GrassPatch
 
 var noise = FastNoiseLite.new()
 
@@ -172,12 +173,20 @@ func set_tile_as_moat(coord: Vector2i, is_moat_tile: bool):
 		animate_tile_y(idx, current_y, current_y - 0.7)
 		moat_tiles[coord] = true
 		
+		# Hide grass on this tile
+		if grass_patch:
+			grass_patch.hide_grass_on_tile(coord)
+		
 	else:
 		if not moat_tiles.has(coord): return # Not a moat
 		
 		# Animate raising
 		animate_tile_y(idx, current_y, current_y + 0.7)
 		moat_tiles.erase(coord)
+		
+		# Show grass on this tile
+		if grass_patch:
+			grass_patch.show_grass_on_tile(coord)
 
 func animate_tile_y(instance_idx: int, start_y: float, end_y: float):
 	var tween = create_tween()

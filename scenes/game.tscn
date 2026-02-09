@@ -41,12 +41,13 @@ volumetric_fog_density = 0.0
 
 [node name="World" type="Node3D" parent="." unique_id=1996604365]
 
-[node name="HexGrid" parent="World" unique_id=1275277607 instance=ExtResource("1_lnu2h")]
+[node name="HexGrid" parent="World" unique_id=1275277607 node_paths=PackedStringArray("grass_patch") instance=ExtResource("1_lnu2h")]
 grid_radius = 15
 noise_threshold = 0.125
 noise_frequency = 0.07
 grass_color = Color(0.022281587, 0.15265098, 3.6098065e-08, 1)
 dirt_color = Color(0.10482413, 0.03586611, 0, 1)
+grass_patch = NodePath("../GrassPatch")
 
 [node name="GrassPatch" type="MultiMeshInstance3D" parent="World" unique_id=33840693 node_paths=PackedStringArray("hex_grid")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)

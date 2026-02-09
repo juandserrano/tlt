@@ -5,6 +5,10 @@ class_name GrassPatch extends MultiMeshInstance3D
 
 @export var hex_grid: HexGrid
 
+# Track which grass instances belong to each tile
+var grass_instances_by_tile: Dictionary = {} # Vector2i -> Array[int]
+var original_transforms: Dictionary = {} # int -> Transform3D
+
 func _ready() -> void:
 	generate_grass()
 
@@ -15,6 +19,13 @@ func generate_grass():
 	
 	var i = 0
 	for hex_pos in hex_grid.tiles:
+		# Get the tile coordinate for this hex position
+		var tile_coord = hex_grid.world_to_axial(hex_pos)
+		
+		# Initialize array for this tile if not exists
+		if not grass_instances_by_tile.has(tile_coord):
+			grass_instances_by_tile[tile_coord] = []
+		
 		for n in grass_count_per_hex:
 			var pos = _get_random_point_in_hex(hex_pos)
 			var xform = Transform3D(Basis(), pos)
@@ -23,6 +34,10 @@ func generate_grass():
 			xform = xform.scaled_local(Vector3(1, randf_range(0.8, 1.2), 1))
 			
 			multimesh.set_instance_transform(i, xform)
+			original_transforms[i] = xform
+			
+			# Track this instance for this tile
+			grass_instances_by_tile[tile_coord].append(i)
 			i += 1
 
 func _get_random_point_in_hex(center: Vector3) -> Vector3:
@@ -40,3 +55,22 @@ func _get_random_point_in_hex(center: Vector3) -> Vector3:
 			continue
 		return center + Vector3(x, 0, z)
 	return center
+
+func hide_grass_on_tile(coord: Vector2i):
+	if not grass_instances_by_tile.has(coord):
+		return
+	
+	for instance_idx in grass_instances_by_tile[coord]:
+		# Hide by scaling to zero
+		var xform = multimesh.get_instance_transform(instance_idx)
+		xform = xform.scaled_local(Vector3.ZERO)
+		multimesh.set_instance_transform(instance_idx, xform)
+
+func show_grass_on_tile(coord: Vector2i):
+	if not grass_instances_by_tile.has(coord):
+		return
+	
+	for instance_idx in grass_instances_by_tile[coord]:
+		# Restore original transform
+		if original_transforms.has(instance_idx):
+			multimesh.set_instance_transform(instance_idx, original_transforms[instance_idx])
