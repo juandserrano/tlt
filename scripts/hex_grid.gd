@@ -78,7 +78,7 @@ func setup_grid():
 		# Radius * TileSize * 2 roughly
 		var size = grid_radius * DEFAULT_TILE_SIZE
 		water.scale = Vector3(size, 1, size)
-		water.position = Vector3(0, -0.2, 0) # Slightly below lowered tile level (-1.0 + 0.4 buffer?) NO, tile lowers by 1.0. Ground is 0. So lowered is -1. Water should be at -0.3 approx.
+		water.position = Vector3(0, -0.25, 0) # Slightly below lowered tile level (-1.0 + 0.4 buffer?) NO, tile lowers by 1.0. Ground is 0. So lowered is -1. Water should be at -0.3 approx.
 
 func axial_to_world(q: int, r: int) -> Vector3:
 	var x = DEFAULT_TILE_SIZE * (sqrt(3.0) * q + sqrt(3.0) / 2.0 * r)

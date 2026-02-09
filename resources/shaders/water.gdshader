@@ -36,9 +36,14 @@ float fresnel(float amount, vec3 normal, vec3 view){
 }
 
 float edge(float depth){
-	depth = 2.0 * depth - 1.0;
+	depth = 1.0 - 2.0 * depth;
 	return near * far / (far + depth * (near - far));
 }
+
+// float edge(float depth){
+// 	depth = 2.0 * depth - 1.0;
+// 	return near * far / (far + depth * (near - far));
+// }
 
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
