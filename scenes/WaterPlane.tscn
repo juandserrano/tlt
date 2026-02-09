@@ -10,7 +10,7 @@ fractal_type = 2
 noise = SubResource("FastNoiseLite_evp2s")
 seamless = true
 as_normal_map = true
-bump_strength = 1.0
+bump_strength = 8.6
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_2sdci"]
 noise_type = 3
@@ -21,13 +21,13 @@ fractal_type = 2
 noise = SubResource("FastNoiseLite_2sdci")
 seamless = true
 as_normal_map = true
-bump_strength = 5.0
+bump_strength = 7.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1ees"]
 render_priority = 0
 shader = ExtResource("1_water")
-shader_parameter/albedo = Color(0, 0.4, 0.8, 1)
-shader_parameter/albedo2 = Color(0, 0.6, 0.9, 1)
+shader_parameter/albedo = Color(0.32469097, 0.4491412, 0.36064342, 1)
+shader_parameter/albedo2 = Color(0.6749612, 0.58719635, 0.31257656, 1)
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.0
 shader_parameter/texture_normal = SubResource("NoiseTexture2D_p2yne")
@@ -37,7 +37,7 @@ shader_parameter/wave_amplitude = 0.07
 shader_parameter/wave_frequency = 4.555
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
-shader_parameter/time_scale = 0.025
+shader_parameter/time_scale = 0.00999999977648
 
 [sub_resource type="QuadMesh" id="QuadMesh_m6j1k"]
 material = SubResource("ShaderMaterial_c1ees")
