@@ -37,7 +37,7 @@ shader_parameter/wave_amplitude = 0.07
 shader_parameter/wave_frequency = 4.555
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
-shader_parameter/time_scale = 0.0
+shader_parameter/time_scale = 0.025
 
 [sub_resource type="QuadMesh" id="QuadMesh_m6j1k"]
 material = SubResource("ShaderMaterial_c1ees")
