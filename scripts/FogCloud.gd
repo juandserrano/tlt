@@ -13,3 +13,11 @@ func _ready():
 		# Collision layer 2 so it doesn't interfere with enemies
 		area.collision_layer = 2
 		area.collision_mask = 0
+
+
+func _on_ttl_timer_timeout() -> void:
+	var tween = create_tween()
+	var fogmat : FogMaterial = fog_volume.material
+	tween.tween_property(fogmat, "density", 0, 2)
+	await tween.finished
+	queue_free()
