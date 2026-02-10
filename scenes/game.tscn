@@ -82,13 +82,14 @@ script = ExtResource("6_p57ef")
 player_tower = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
 
-[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager", "player", "audio_stream_player", "particle_manager")]
+[node name="GameManager" type="Node" parent="." unique_id=923243827 node_paths=PackedStringArray("enemy_manager", "player", "audio_stream_player", "particle_manager", "card_manager")]
 script = ExtResource("6_u5sy4")
 enemy_manager = NodePath("../EnemyManager")
 player = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
 particle_manager = NodePath("../ParticleManager")
-base_round_time = 1.0
+card_manager = NodePath("../CardManager")
+base_round_time = 8.0
 
 [node name="RoundTimer" type="Timer" parent="GameManager" unique_id=1985011365]
 wait_time = 5.0
