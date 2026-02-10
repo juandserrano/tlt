@@ -164,8 +164,19 @@ func get_enemy_under_mouse() -> Enemy:
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * 1000.0 # Ray length of 1000 units
 	
-	# Set up the raycast query
+	# First, check if we hit a fog cloud (Area3D on layer 2)
 	var space_state = camera.get_world_3d().direct_space_state
+	var fog_query = PhysicsRayQueryParameters3D.create(from, to)
+	fog_query.collide_with_areas = true
+	fog_query.collide_with_bodies = false
+	fog_query.collision_mask = 2 # Only check layer 2 (fog clouds)
+	
+	var fog_result = space_state.intersect_ray(fog_query)
+	if not fog_result.is_empty():
+		# Hit a fog cloud, block the click
+		return null
+	
+	# Set up the raycast query for enemies
 	var query = PhysicsRayQueryParameters3D.create(from, to)
 	query.collide_with_areas = false # Only hit physics bodies
 	query.collide_with_bodies = true

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cfog1234568aa"]
+
+[ext_resource type="Script" uid="uid://bcp5fuk3lr61u" path="res://scripts/FogCloud.gd" id="1_fogcloud"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pxevr"]
+height = 3.0
+radius = 5.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pxevr"]
+frequency = 0.0018
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_ysbo8"]
+noise = SubResource("FastNoiseLite_pxevr")
+
+[sub_resource type="FogMaterial" id="FogMaterial_pxevr"]
+density = 8.0
+density_texture = SubResource("NoiseTexture3D_ysbo8")
+
+[node name="FogCloud" type="Node3D" unique_id=1087702514]
+script = ExtResource("1_fogcloud")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=807299115]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1269784587]
+shape = SubResource("CylinderShape3D_pxevr")
+
+[node name="FogVolume" type="FogVolume" parent="." unique_id=1879085268]
+size = Vector3(10, 5, 10)
+shape = 0
+material = SubResource("FogMaterial_pxevr")

@@ -141,6 +141,41 @@ func landmines():
 	
 	print("Landmines hit ", hit_count, " enemies.")
 
+func new_fog_cloud():
+	var tree = Signals.get_tree()
+	if not tree: return
+	
+	var root = tree.root
+	var hex_grid = root.get_node_or_null("Game/World/HexGrid")
+	var world = root.get_node_or_null("Game/World")
+	
+	if not hex_grid:
+		print("Missing hex_grid for fog cloud")
+		return
+	
+	if not world:
+		print("Missing world for fog cloud")
+		return
+	
+	# Get all tile coordinates from the hex grid
+	var all_tiles = hex_grid.tile_indices.keys()
+	
+	if all_tiles.size() == 0:
+		print("No tiles available for fog cloud")
+		return
+	
+	# Pick a random tile
+	var random_tile = all_tiles[randi() % all_tiles.size()]
+	var world_pos = hex_grid.axial_to_world(random_tile.x, random_tile.y)
+	
+	print("Fog cloud spawned at tile ", random_tile, " (world pos: ", world_pos, ")")
+	
+	# Instantiate fog cloud visual effect at world_pos
+	const FOG_CLOUD_SCENE = preload("res://scenes/FogCloud.tscn")
+	var fog_cloud = FOG_CLOUD_SCENE.instantiate()
+	world.add_child(fog_cloud)
+	fog_cloud.global_position = world_pos + Vector3(0, 0.5, 0) # Slightly above ground
+
 func do_special_attack():
 	match card_type:
 		CardManager.CardType.Halo:

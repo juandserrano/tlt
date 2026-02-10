@@ -71,4 +71,15 @@ func do_enemies_turn():
 	processing_enemies = false
 
 func do_resolve_phase() -> void:
+	# Handle autoplay cards (like fog)
+	if card_manager:
+		# Iterate backwards so we can safely remove cards while iterating
+		for i in range(card_manager.player_hand.size() - 1, -1, -1):
+			var card = card_manager.player_hand[i]
+			if card.card_resource.is_autoplay:
+				print("fog card played")
+				# Call the new_fog_cloud function
+				card.card_resource.new_fog_cloud()
+				card_manager.destroy_card_after_use(card)
+	
 	state = GameState.EnemiesTurn
