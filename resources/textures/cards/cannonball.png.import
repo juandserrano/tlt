@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bked6obt78sea"
 path.s3tc="res://.godot/imported/cannonball.png-9ed61cb0c09b2d6d8860c9f640e22f3b.s3tc.ctex"
+path.etc2="res://.godot/imported/cannonball.png-9ed61cb0c09b2d6d8860c9f640e22f3b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://resources/textures/cards/cannonball.png"
-dest_files=["res://.godot/imported/cannonball.png-9ed61cb0c09b2d6d8860c9f640e22f3b.s3tc.ctex"]
+dest_files=["res://.godot/imported/cannonball.png-9ed61cb0c09b2d6d8860c9f640e22f3b.s3tc.ctex", "res://.godot/imported/cannonball.png-9ed61cb0c09b2d6d8860c9f640e22f3b.etc2.ctex"]
 
 [params]
 
