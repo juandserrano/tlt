@@ -54,6 +54,7 @@ func move_to_tile(q: int, r: int):
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(self, "position", world_pos, 0.3)
+	await tween.finished
 
 	
 func spawn_above_ground(q: int, r: int):

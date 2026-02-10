@@ -53,6 +53,7 @@ func spawn_round_wave(round_number: int):
 				spawn_enemy_of_class(EnemyClass.values().pick_random())
 			)
 			tween.tween_interval(0.2)
+	await tween.finished
 	
 	GameManager.state = GameManager.GameState.PlayerTurn
 

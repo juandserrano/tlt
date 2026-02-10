@@ -7,9 +7,9 @@ class_name GameManager extends Node
 @export var particle_manager: ParticleManager
 @export var card_manager: CardManager
 @export_category("Timers")
-@export var base_round_time : float
+@export var base_round_time: float
 
-@onready var round_timer : Timer = $RoundTimer
+@onready var round_timer: Timer = $RoundTimer
 
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
@@ -23,7 +23,7 @@ enum GameState {
 }
 
 static var state: GameState
-var round_number: int
+var round_number: int = 1
 var processing_enemies: bool = false
 
 func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
@@ -58,7 +58,8 @@ func _process(_delta: float) -> void:
 			do_enemies_turn()
 
 func do_spawn_phase():
-	enemy_manager.spawn_round_wave(1)
+	# enemy_manager.spawn_round_wave(1)
+	state = GameState.PlayerTurn
 
 func do_player_turn():
 	if card_manager and card_manager.is_qte_active: return
@@ -96,3 +97,7 @@ func do_resolve_phase() -> void:
 func _on_round_timer_timeout() -> void:
 	if state == GameState.PlayerTurn:
 			state = GameState.Resolve
+
+
+func _on_enemy_spawn_timer_timeout() -> void:
+	enemy_manager.spawn_round_wave(round_number)

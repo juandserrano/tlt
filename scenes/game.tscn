@@ -94,6 +94,10 @@ particle_manager = NodePath("../ParticleManager")
 card_manager = NodePath("../CardManager")
 base_round_time = 8.0
 
+[node name="EnemySpawnTimer" type="Timer" parent="GameManager" unique_id=1065800831]
+wait_time = 20.0
+autostart = true
+
 [node name="RoundTimer" type="Timer" parent="GameManager" unique_id=1985011365]
 wait_time = 5.0
 
@@ -130,4 +134,5 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
+[connection signal="timeout" from="GameManager/EnemySpawnTimer" to="GameManager" method="_on_enemy_spawn_timer_timeout"]
 [connection signal="timeout" from="GameManager/RoundTimer" to="GameManager" method="_on_round_timer_timeout"]
