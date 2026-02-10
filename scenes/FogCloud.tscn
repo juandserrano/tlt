@@ -4,7 +4,7 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_pxevr"]
 height = 3.0
-radius = 5.0
+radius = 4.5
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_pxevr"]
 frequency = 0.0018

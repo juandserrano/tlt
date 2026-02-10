@@ -1,10 +1,15 @@
 class_name GameManager extends Node
 
+@export_category("Scenes")
 @export var enemy_manager: EnemyManager
 @export var player: Player
 @export var audio_stream_player: AudioStreamPlayer
 @export var particle_manager: ParticleManager
 @export var card_manager: CardManager
+@export_category("Timers")
+@export var base_round_time : float
+
+@onready var round_timer : Timer = $RoundTimer
 
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
@@ -30,6 +35,8 @@ func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
 
 
 func _ready() -> void:
+	round_timer.wait_time = base_round_time
+	round_timer.start()
 	if not particle_manager:
 		particle_manager = get_tree().current_scene.find_child("ParticleManager")
 	
@@ -57,11 +64,11 @@ func do_player_turn():
 	if card_manager and card_manager.is_qte_active: return
 
 # Handle input during player turn (only fires if GUI didn't consume the event)
-func _unhandled_input(event: InputEvent) -> void:
-	if state == GameState.PlayerTurn:
-		if event.is_action_pressed("next turn"):
-			state = GameState.Resolve
-			get_viewport().set_input_as_handled()
+# func _unhandled_input(event: InputEvent) -> void:
+# 	if state == GameState.PlayerTurn:
+# 		if event.is_action_pressed("next turn"):
+# 			state = GameState.Resolve
+# 			get_viewport().set_input_as_handled()
 
 func do_enemies_turn():
 	if processing_enemies: return
@@ -77,9 +84,15 @@ func do_resolve_phase() -> void:
 		for i in range(card_manager.player_hand.size() - 1, -1, -1):
 			var card = card_manager.player_hand[i]
 			if card.card_resource.is_autoplay:
-				print("fog card played")
-				# Call the new_fog_cloud function
-				card.card_resource.new_fog_cloud()
-				card_manager.destroy_card_after_use(card)
+				if card.card_type == CardManager.CardType.Fog:
+					print("fog card played")
+					# Call the new_fog_cloud function
+					card.card_resource.new_fog_cloud()
+					card_manager.destroy_card_after_use(card)
 	
 	state = GameState.EnemiesTurn
+
+
+func _on_round_timer_timeout() -> void:
+	if state == GameState.PlayerTurn:
+			state = GameState.Resolve

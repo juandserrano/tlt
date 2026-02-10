@@ -1,6 +1,6 @@
 extends Node3D
 
-# Static fog cloud that blocks visibility and mouse clicks
+@export var fog_duration : float = 1
 
 @onready var fog_volume = $FogVolume
 @onready var area = $Area3D
@@ -18,6 +18,6 @@ func _ready():
 func _on_ttl_timer_timeout() -> void:
 	var tween = create_tween()
 	var fogmat : FogMaterial = fog_volume.material
-	tween.tween_property(fogmat, "density", 0, 2)
+	tween.tween_property(fogmat, "density", 0, fog_duration)
 	await tween.finished
 	queue_free()

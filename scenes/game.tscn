@@ -88,6 +88,10 @@ enemy_manager = NodePath("../EnemyManager")
 player = NodePath("../PlayerTower")
 audio_stream_player = NodePath("../AudioManager")
 particle_manager = NodePath("../ParticleManager")
+base_round_time = 1.0
+
+[node name="RoundTimer" type="Timer" parent="GameManager" unique_id=1985011365]
+wait_time = 5.0
 
 [node name="AudioManager" type="AudioStreamPlayer" parent="." unique_id=1458617067]
 volume_db = -10.339
@@ -121,3 +125,5 @@ offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
+
+[connection signal="timeout" from="GameManager/RoundTimer" to="GameManager" method="_on_round_timer_timeout"]
