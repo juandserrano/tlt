@@ -5,6 +5,7 @@ extends Node3D
 var max_health: int
 var moves_per_turn: int
 var current_health: int
+var evade_probability: float
 
 
 const SPAWN_HEIGHT: int = 10
@@ -26,6 +27,7 @@ func _ready() -> void:
 	setup_collision_box()
 	max_health = res.max_health
 	current_health = max_health
+	evade_probability = res.evade_probability
 	# Set up input handling
 	set_process_input(true)
 

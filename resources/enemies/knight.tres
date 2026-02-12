@@ -7,4 +7,5 @@
 script = ExtResource("2_ubxei")
 max_health = 2
 mesh = ExtResource("1_3lsmh")
+evade_probability = 0.2
 metadata/_custom_type_script = "uid://nswr67dg4ln2"

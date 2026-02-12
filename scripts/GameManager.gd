@@ -33,8 +33,11 @@ func _on_enemy_attacked_player(_enemy: Enemy, impact_pos: Vector3, damage: int):
 	audio_stream_player.stream = sound_falling_impact
 	audio_stream_player.play()
 
+func start_round(round_num: int):
+	enemy_manager.spawn_round_wave(round_num)
 
 func _ready() -> void:
+	start_round(round_number)
 	round_timer.wait_time = base_round_time
 	round_timer.start()
 	if not particle_manager:

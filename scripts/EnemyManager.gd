@@ -3,6 +3,7 @@ class_name EnemyManager extends Node
 @export var player_tower: Player
 @export var audio_stream_player: AudioStreamPlayer
 
+@onready var hex_grid = get_node("/root/Game/World/HexGrid")
 var enemies_in_play: Array[Enemy]
 var enemy_bag: Array[Enemy]
 static var hovered_enemy: Enemy
@@ -120,44 +121,51 @@ func is_tile_occupied(q: int, r: int) -> bool:
 			return true
 	return false
 
+func knight_evade(knight: Enemy):
+	if knight.enemy_class == EnemyManager.EnemyClass.Knight:
+		try_to_move_enemy(knight)
+
+func try_to_move_enemy(enemy: Enemy):
+	#Check if enemy is at striking distance from player
+	if hex_distance(enemy.current_tile, player_tower.current_tile) == 2:
+		enemy.melee_attack_player()
+		await get_tree().create_timer(0.1).timeout
+		return
+
+	# Otherwise try to move
+	var sorted_neighbors = get_neighbors_sorted_by_distance(enemy.current_tile, player_tower.current_tile)
+	
+	# Try each neighbor in order of closeness to target
+	var moved = false
+	for neighbor in sorted_neighbors:
+		if not is_tile_occupied(neighbor.x, neighbor.y):
+			# MOAT LOGIC START
+			if hex_grid and hex_grid.is_moat(neighbor):
+				# Attempting to move into a moat tile
+				print("Enemy tried to cross moat at ", neighbor)
+				# Shore up the tile (remove moat)
+				hex_grid.set_tile_as_moat(neighbor, false)
+				# Enemy stays still
+				moved = true # "Action taken", effectively.
+				await get_tree().create_timer(0.1).timeout
+				break
+			# MOAT LOGIC END
+			
+			enemy.move_to_tile(neighbor.x, neighbor.y)
+			await get_tree().create_timer(0.1).timeout
+			moved = true
+			break
+	
+	# If no valid move found, enemy stays in place
+	if not moved:
+		pass # Enemy cannot move this turn
+
+
 func enemies_move_or_attack():
 	# Optional: Get reference to hex_grid here or at class level if not already available
-	var hex_grid = get_node("/root/Game/World/HexGrid")
 
 	for enemy in enemies_in_play:
-		#Check if enemy is at striking distance from player
-		if hex_distance(enemy.current_tile, player_tower.current_tile) == 2:
-			enemy.melee_attack_player()
-			await get_tree().create_timer(0.1).timeout
-			continue
-
-		# Otherwise try to move
-		var sorted_neighbors = get_neighbors_sorted_by_distance(enemy.current_tile, player_tower.current_tile)
-		
-		# Try each neighbor in order of closeness to target
-		var moved = false
-		for neighbor in sorted_neighbors:
-			if not is_tile_occupied(neighbor.x, neighbor.y):
-				# MOAT LOGIC START
-				if hex_grid and hex_grid.is_moat(neighbor):
-					# Attempting to move into a moat tile
-					print("Enemy tried to cross moat at ", neighbor)
-					# Shore up the tile (remove moat)
-					hex_grid.set_tile_as_moat(neighbor, false)
-					# Enemy stays still
-					moved = true # "Action taken", effectively.
-					await get_tree().create_timer(0.1).timeout
-					break
-				# MOAT LOGIC END
-				
-				enemy.move_to_tile(neighbor.x, neighbor.y)
-				await get_tree().create_timer(0.1).timeout
-				moved = true
-				break
-		
-		# If no valid move found, enemy stays in place
-		if not moved:
-			pass # Enemy cannot move this turn
+		try_to_move_enemy(enemy)
 
 
 # Returns all neighboring tiles sorted by distance to target (closest first)

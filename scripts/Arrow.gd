@@ -3,6 +3,7 @@ extends Area3D
 var target: Node3D # Can be Enemy
 var damage: int
 var speed: float = 25.0
+@onready var enemy_manager: EnemyManager = $"/root/Game/EnemyManager"
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(target):
@@ -21,7 +22,14 @@ func _process(delta: float) -> void:
 	
 	if distance < 0.5:
 		if is_instance_valid(target) and target.has_method("take_damage"):
-			target.take_damage(damage)
+			var enemy: Enemy = target
+			if enemy.enemy_class != EnemyManager.EnemyClass.Knight:
+				enemy.take_damage(damage)
+			else:
+				if randf_range(0, 1) < enemy.evade_probability:
+					enemy_manager.knight_evade(enemy)
+				else:
+					enemy.take_damage(damage)
 		queue_free()
 		return
 
