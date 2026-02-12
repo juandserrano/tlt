@@ -114,6 +114,7 @@ func melee_attack_player():
 	tween.tween_property(self, "position", starting_pos, 0.1)
 
 func take_damage(amount: int):
+	Signals.enemy_damaged.emit(self, amount)
 	current_health -= amount
 	if current_health <= 0:
 		current_health = 0

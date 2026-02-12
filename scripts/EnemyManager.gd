@@ -15,6 +15,8 @@ var bishop_mesh = preload("res://resources/models/enemies/bishop_mesh.tres")
 var queen_mesh = preload("res://resources/models/enemies/queen_mesh.tres")
 var king_mesh = preload("res://resources/models/enemies/king_mesh.tres")
 
+var flying_text_scene = preload("res://scenes/FlyingText.tscn")
+
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
 const SPAWN_RADIUS: int = 10
@@ -91,6 +93,8 @@ func _ready() -> void:
 	Signals.enemy_hit_ground.connect(_on_enemy_hit_ground)
 	Signals.mouse_hover_enemy.connect(_on_mouse_hover_enemy)
 	Signals.mouse_unhover_enemy.connect(_on_mouse_unhover_enemy)
+	Signals.enemy_damaged.connect(_on_enemy_damaged)
+
 
 	# Create and add the container for enemy instances
 	enemies_container = Node3D.new()
@@ -199,3 +203,21 @@ func get_neighbors_sorted_by_distance(from_tile: Vector2i, target_coord: Vector2
 # Calculate hexagonal distance between two axial coordinates
 func hex_distance(a: Vector2i, b: Vector2i) -> int:
 	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
+
+func _on_enemy_damaged(enemy: Enemy, amount: int):
+	var text: Label3D = flying_text_scene.instantiate()
+	add_child(text)
+	text.show()
+	text.global_position = enemy.global_position
+	text.text = String.num(amount, 0)
+	text.transparency = 1
+	text.modulate = Color.DARK_ORANGE
+
+	var tween1 = create_tween()
+	tween1.tween_property(text, "transparency", 0, 0.5)
+	tween1.tween_property(text, "transparency", 0, 0.5)
+	tween1.tween_property(text, "transparency", 1, 0.5)
+
+	var tween2 = create_tween()
+	tween2.tween_property(text, "position", text.global_position + Vector3(0, 4, 0), 1.5)
+	tween2.tween_callback(text.queue_free)

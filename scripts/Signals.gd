@@ -17,7 +17,7 @@ signal enemy_spawned(enemy: Enemy, q: int, r: int)
 signal enemy_moved(enemy: Enemy, from_q: int, from_r: int, to_q: int, to_r: int)
 
 # Emitted when an enemy takes damage
-signal enemy_damaged(enemy: Enemy, damage: int, remaining_health: int)
+signal enemy_damaged(enemy: Enemy, damage: int)
 
 # Emitted when an enemy dies
 signal enemy_died(enemy: Enemy)

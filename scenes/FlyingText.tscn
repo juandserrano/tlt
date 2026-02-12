@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cevrsonmidgs5"]
+
+[node name="FlyingText" type="Label3D" unique_id=1197248788]
+transform = Transform3D(1, 0, 0, 0, 0.81915206, 0.57357645, 0, -0.57357645, 0.81915206, 0, 0, 0)
+pixel_size = 0.0011
+billboard = 1
+no_depth_test = true
+fixed_size = true
+render_priority = 2
+text = "100"
+font_size = 48
+outline_size = 15
