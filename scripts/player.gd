@@ -16,3 +16,4 @@ func _process(delta: float) -> void:
 
 func damage_player(damage: int):
 	current_health -= damage
+	Signals.player_damaged.emit(self, damage)

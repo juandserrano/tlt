@@ -35,7 +35,7 @@ signal enemy_hit_ground(enemy: Enemy)
 signal player_moved(from_q: int, from_r: int, to_q: int, to_r: int)
 
 # Emitted when player takes damage
-signal player_damaged(damage: int, remaining_health: int)
+signal player_damaged(player: Player, damage: int)
 
 # Emitted when player health changes
 signal player_health_changed(current_health: int, max_health: int)

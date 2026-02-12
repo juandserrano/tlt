@@ -10,6 +10,7 @@ class_name GameManager extends Node
 @export var base_round_time: float
 
 @onready var round_timer: Timer = $RoundTimer
+var flying_text_scene = preload("res://scenes/FlyingText.tscn")
 
 const sound_falling_impact = preload("res://resources/sounds/falling_impact.wav")
 
@@ -47,6 +48,7 @@ func _ready() -> void:
 		card_manager = get_tree().current_scene.find_child("CardManager", true, false)
 
 	Signals.enemy_attacked_player.connect(_on_enemy_attacked_player)
+	Signals.player_damaged.connect(_on_player_damaged)
 	state = GameState.Spawning
 
 func _process(_delta: float) -> void:
@@ -104,3 +106,28 @@ func _on_round_timer_timeout() -> void:
 
 func _on_enemy_spawn_timer_timeout() -> void:
 	enemy_manager.spawn_round_wave(round_number)
+
+func _on_player_damaged(player: Player, damage: int):
+	var text: Label3D = flying_text_scene.instantiate()
+	add_child(text)
+	text.show()
+	text.global_position = player.global_position
+	text.text = String.num(damage, 0)
+	text.transparency = 1
+	text.modulate = Color.INDIAN_RED
+
+	# Random horizontal direction
+	var random_x = randf_range(-2.0, 2.0)
+	var random_z = randf_range(-1.0, 1.0)
+	var target_pos = text.global_position + Vector3(random_x, 4, random_z)
+	
+	var tween1 = create_tween()
+	tween1.tween_property(text, "transparency", 0, 0.5)
+	tween1.tween_property(text, "transparency", 0, 0.5)
+	tween1.tween_property(text, "transparency", 1, 0.5)
+
+	var tween2 = create_tween()
+	tween2.set_ease(Tween.EASE_OUT) # Creates arc effect
+	tween2.set_trans(Tween.TRANS_QUAD) # Parabolic motion
+	tween2.tween_property(text, "position", target_pos, 1.5)
+	tween2.tween_callback(text.queue_free)

@@ -167,7 +167,6 @@ func try_to_move_enemy(enemy: Enemy):
 
 func enemies_move_or_attack():
 	# Optional: Get reference to hex_grid here or at class level if not already available
-
 	for enemy in enemies_in_play:
 		try_to_move_enemy(enemy)
 
@@ -213,11 +212,18 @@ func _on_enemy_damaged(enemy: Enemy, amount: int):
 	text.transparency = 1
 	text.modulate = Color.DARK_ORANGE
 
+	# Random horizontal direction
+	var random_x = randf_range(-2.0, 2.0)
+	var random_z = randf_range(-1.0, 1.0)
+	var target_pos = text.global_position + Vector3(random_x, 4, random_z)
+	
 	var tween1 = create_tween()
 	tween1.tween_property(text, "transparency", 0, 0.5)
 	tween1.tween_property(text, "transparency", 0, 0.5)
 	tween1.tween_property(text, "transparency", 1, 0.5)
 
 	var tween2 = create_tween()
-	tween2.tween_property(text, "position", text.global_position + Vector3(0, 4, 0), 1.5)
+	tween2.set_ease(Tween.EASE_OUT) # Creates arc effect
+	tween2.set_trans(Tween.TRANS_QUAD) # Parabolic motion
+	tween2.tween_property(text, "position", target_pos, 1.5)
 	tween2.tween_callback(text.queue_free)
