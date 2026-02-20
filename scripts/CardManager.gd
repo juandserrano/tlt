@@ -340,6 +340,11 @@ func select_card_for_play(card: Card) -> void:
 	if currently_selected_card == card:
 		card.deselect()
 		currently_selected_card = null
+		# Cancel cannonball targeting if active
+		if targeting_mode_card == card:
+			targeting_mode_card = null
+			var hex_grid = get_node("/root/Game/World/HexGrid")
+			if hex_grid: hex_grid.clear_highlights()
 		return
 	
 	# Deselect the previously selected card
